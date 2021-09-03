@@ -1,18 +1,33 @@
-<template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  </div>
-</template>
-
 <script lang="ts">
 import { defineComponent } from 'vue'
-import HelloWorld from '@/components/HelloWorld.vue' // @ is an alias to /src
+
+import { NSpace, NButton } from 'naive-ui'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'Home',
+
   components: {
-    HelloWorld
+    NSpace,
+    NButton
+  },
+
+  setup() {
+    const router = useRouter()
+    const navigateproducts = () => {
+      router.push('products')
+    }
+
+    return {
+      navigateproducts
+    }
   }
 })
 </script>
+<template>
+  <div class="home">
+    <n-space>
+      <n-button @click="navigateproducts">Default</n-button>
+    </n-space>
+  </div>
+</template>
