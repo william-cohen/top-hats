@@ -11,6 +11,7 @@ import {
 } from 'naive-ui'
 
 import BrowseProducts from '@/components/products/BrowseProducts.vue'
+import PageHeader from '@/components/header/PageHeader.vue'
 
 export default defineComponent({
   name: 'Products',
@@ -22,9 +23,10 @@ export default defineComponent({
     NLayoutHeader,
     NLayoutContent,
     NLayoutFooter,
-    NH1,
+    // NH1,
     NSpace,
-    BrowseProducts
+    BrowseProducts,
+    PageHeader
   }
 
   // setup(props) {}
@@ -34,7 +36,7 @@ export default defineComponent({
   <n-layout position="absolute">
     <n-layout-header bordered>
       <n-space justify="center">
-        <n-h1>Rothostore</n-h1>
+        <page-header />
       </n-space>
     </n-layout-header>
     <n-layout-content content-style="padding: 24px;">
