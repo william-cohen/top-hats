@@ -94,7 +94,6 @@ export default defineComponent({
     <n-h6>Color</n-h6>
     <n-space>
       <n-tag
-        type="warning"
         checkable
         :checked="filters.color === 'yellow'"
         @click="setColor('yellow')"
@@ -103,7 +102,7 @@ export default defineComponent({
       </n-tag>
       <n-tag
         checkable
-        :checked="filters.category === 'blue'"
+        :checked="filters.color === 'blue'"
         @click="setColor('blue')"
       >
         Blue
