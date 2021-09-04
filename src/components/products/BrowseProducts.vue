@@ -1,15 +1,19 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import {
   NLayout,
   NLayoutHeader,
   NLayoutSider,
-  NLayoutFooter,
-  NSkeleton,
-  NCard,
-  NBreadcrumb,
-  NBreadcrumbItem
+  NGrid,
+  NGridItem,
+  NCard
 } from 'naive-ui'
+
+import { useStore } from '@/store'
+
+import BreadCrumb from '../navigation/BreadCrumb.vue'
+import ProductCard from './cards/ProductCard.vue'
+import ProductFilters from './filters/ProductFilters.vue'
 
 export default defineComponent({
   name: 'BrowseProducts',
@@ -20,31 +24,41 @@ export default defineComponent({
     NLayout,
     NLayoutHeader,
     NLayoutSider,
-    // NLayoutFooter,
-    NSkeleton,
+    NGrid,
+    NGridItem,
     NCard,
-    NBreadcrumb,
-    NBreadcrumbItem
-  }
+    BreadCrumb,
+    ProductCard,
+    ProductFilters
+  },
 
-  // setup(props) {}
+  setup(props) {
+    const store = useStore()
+
+    const displayProducts = computed(() => store.items)
+
+    return {
+      displayProducts
+    }
+  }
 })
 </script>
 <template>
   <n-card>
     <n-layout embedded>
       <n-layout-header style="height: 64px; padding: 24px" bordered>
-        <n-breadcrumb>
-          <n-breadcrumb-item> Products </n-breadcrumb-item>
-          <n-breadcrumb-item> All </n-breadcrumb-item>
-        </n-breadcrumb>
+        <bread-crumb />
       </n-layout-header>
       <n-layout has-sider embedded>
         <n-layout-sider bordered content-style="padding: 24px;">
-          Filters and such
+          <product-filters />
         </n-layout-sider>
         <n-layout content-style="padding: 24px;">
-          <n-skeleton text :repeat="2" /> <n-skeleton text style="width: 60%" />
+          <n-grid :x-gap="12" :y-gap="8" :cols="4">
+            <n-grid-item v-for="product in displayProducts" :key="product.id">
+              <product-card :product="product" />
+            </n-grid-item>
+          </n-grid>
         </n-layout>
       </n-layout>
     </n-layout>

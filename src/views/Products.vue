@@ -37,11 +37,14 @@ export default defineComponent({
         <n-h1>Rothostore</n-h1>
       </n-space>
     </n-layout-header>
-    <n-layout-content content-style="padding: 24px;"
-      ><div class="container">
-        <browse-products /></div
-    ></n-layout-content>
-    <n-layout-footer position="absolute">Genertic Footer</n-layout-footer>
+    <n-layout-content content-style="padding: 24px;">
+      <div class="container">
+        <browse-products />
+      </div>
+    </n-layout-content>
+    <n-layout-footer position="absolute" bordered>
+      <n-space justify="center">Genertic Footer</n-space>
+    </n-layout-footer>
   </n-layout>
 </template>
 <style lang="scss" scoped>
