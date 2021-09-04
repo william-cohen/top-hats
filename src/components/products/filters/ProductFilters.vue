@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, PropType, ref, watch } from 'vue'
 
 import { NForm, NH3, NH6, NSpace, NTag, NSlider } from 'naive-ui'
 
@@ -12,7 +12,16 @@ export interface FilterOptions {
 export default defineComponent({
   name: 'ProductFilters',
 
-  props: {},
+  props: {
+    modelValue: {
+      required: true,
+      type: Object as PropType<FilterOptions>
+    }
+  },
+
+  emits: {
+    'update:modelValue': (m: FilterOptions) => !!m
+  },
 
   components: {
     NForm,
@@ -23,14 +32,15 @@ export default defineComponent({
     NSlider
   },
 
-  setup() {
-    const filters = ref<FilterOptions>({
-      category: '',
-      color: '',
-      priceRange: [1, 800]
+  setup(props, context) {
+    const filters = computed({
+      get() {
+        return props.modelValue
+      },
+      set(newModel: FilterOptions) {
+        context.emit('update:modelValue', newModel)
+      }
     })
-
-    watch(filters, (f) => console.log('Filtersd updated, ', f))
 
     const setCategory = (newCategory: 'table' | 'sofa' | 'lamp' | 'chair') =>
       (filters.value.category =

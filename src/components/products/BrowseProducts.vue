@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import {
   NLayout,
   NLayoutHeader,
@@ -13,7 +13,8 @@ import { useStore } from '@/store'
 
 import BreadCrumb from '../navigation/BreadCrumb.vue'
 import ProductCard from './cards/ProductCard.vue'
-import ProductFilters from './filters/ProductFilters.vue'
+import ProductFilters, { FilterOptions } from './filters/ProductFilters.vue'
+import { Product } from '@/types/products'
 
 export default defineComponent({
   name: 'BrowseProducts',
@@ -35,9 +36,28 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
 
-    const displayProducts = computed(() => store.items)
+    const filters = ref<FilterOptions>({
+      category: '',
+      color: '',
+      priceRange: [1, 800]
+    })
+
+    const categoryFilter = (product: Product) =>
+      product.type.includes(filters.value.category)
+
+    const colorFilter = (product: Product) =>
+      product.color.includes(filters.value.color)
+
+    const priceFilter = (product: Product) =>
+      product.price >= filters.value.priceRange[0] &&
+      product.price <= filters.value.priceRange[1]
+
+    const displayProducts = computed(() =>
+      store.items.filter(categoryFilter).filter(colorFilter).filter(priceFilter)
+    )
 
     return {
+      filters,
       displayProducts
     }
   }
@@ -49,11 +69,15 @@ export default defineComponent({
       <n-layout-header style="height: 64px; padding: 24px" bordered>
         <bread-crumb />
       </n-layout-header>
-      <n-layout has-sider embedded>
-        <n-layout-sider bordered content-style="padding: 24px;">
-          <product-filters />
+      <n-layout has-sider embedded position="relative">
+        <n-layout-sider
+          bordered
+          content-style="padding: 24px;"
+          :native-scrollbar="false"
+        >
+          <product-filters v-model="filters" />
         </n-layout-sider>
-        <n-layout content-style="padding: 24px;">
+        <n-layout content-style="padding: 24px;" :native-scrollbar="false">
           <n-grid :x-gap="12" :y-gap="8" :cols="4">
             <n-grid-item v-for="product in displayProducts" :key="product.id">
               <product-card :product="product" />
