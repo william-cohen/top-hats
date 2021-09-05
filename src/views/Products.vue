@@ -35,11 +35,9 @@ export default defineComponent({
 <template>
   <n-layout position="absolute">
     <n-layout-header bordered>
-      <n-space justify="center">
-        <page-header />
-      </n-space>
+      <page-header />
     </n-layout-header>
-    <n-layout-content content-style="padding: 24px;">
+    <n-layout-content content-style="padding: 24px;" class="bg">
       <div class="container">
         <browse-products />
       </div>
@@ -53,9 +51,13 @@ export default defineComponent({
 .container {
   padding-right: 15px;
   padding-left: 15px;
-  margin-top: 160px;
+  margin-top: 80px;
   margin-right: auto;
   margin-left: auto;
   max-width: 1200px;
+}
+
+.bg {
+  background-color: #fff1e7;
 }
 </style>
