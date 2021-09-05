@@ -1,13 +1,29 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import { GlobalThemeOverrides, NConfigProvider } from 'naive-ui'
+import {
+  GlobalThemeOverrides,
+  NConfigProvider,
+  NLayout,
+  NLayoutHeader,
+  NLayoutContent,
+  NLayoutFooter,
+  NSpace
+} from 'naive-ui'
+
+import PageHeader from '@/components/header/PageHeader.vue'
 
 export default defineComponent({
   name: 'App',
 
   components: {
-    NConfigProvider
+    NConfigProvider,
+    NLayout,
+    NLayoutHeader,
+    NLayoutContent,
+    NLayoutFooter,
+    NSpace,
+    PageHeader
   },
 
   setup() {
@@ -27,9 +43,6 @@ export default defineComponent({
       common: {
         primaryColor: colors['Antique Brass'],
         hoverColor: colors['Antique Brass']
-      },
-      Button: {
-        textColor: colors['Antique Brass']
       },
       Select: {
         peers: {
@@ -63,6 +76,32 @@ export default defineComponent({
 </script>
 <template>
   <n-config-provider :theme-overrides="themeOverrides">
-    <router-view />
+    <n-layout position="absolute">
+      <n-layout-header bordered>
+        <page-header />
+      </n-layout-header>
+      <n-layout-content content-style="padding: 24px;" class="bg">
+        <div class="container">
+          <router-view />
+        </div>
+      </n-layout-content>
+      <n-layout-footer position="absolute" bordered>
+        <n-space justify="center">Genertic Footer</n-space>
+      </n-layout-footer>
+    </n-layout>
   </n-config-provider>
 </template>
+<style lang="scss" scoped>
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-top: 80px;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 1200px;
+}
+
+.bg {
+  background-color: #fff1e7;
+}
+</style>

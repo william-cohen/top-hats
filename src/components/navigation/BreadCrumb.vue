@@ -1,7 +1,8 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 
 import { NBreadcrumb, NBreadcrumbItem } from 'naive-ui'
+import { useRoute, useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'BreadCrumb',
@@ -11,12 +12,29 @@ export default defineComponent({
   components: {
     NBreadcrumb,
     NBreadcrumbItem
+  },
+
+  setup() {
+    const router = useRouter()
+    const route = useRoute()
+
+    const productName = computed(() => route.params['productName'])
+
+    const navigateTo = (name: string) => router.push({ name })
+
+    return {
+      navigateTo,
+      productName
+    }
   }
 })
 </script>
 <template>
   <n-breadcrumb>
-    <n-breadcrumb-item> Products </n-breadcrumb-item>
-    <n-breadcrumb-item> All </n-breadcrumb-item>
+    <n-breadcrumb-item @click="navigateTo('Products')">
+      Products
+    </n-breadcrumb-item>
+    <n-breadcrumb-item v-if="productName">{{ productName }}</n-breadcrumb-item>
+    <n-breadcrumb-item v-else>All</n-breadcrumb-item>
   </n-breadcrumb>
 </template>

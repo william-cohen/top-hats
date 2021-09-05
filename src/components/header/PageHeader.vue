@@ -6,14 +6,14 @@ import HatIcon from '../icon/HatIcon.vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 const renderRouterLink =
-  (label: string, routeName: string): (() => VNodeChild) =>
+  (name: string): (() => VNodeChild) =>
   () =>
     h(
       RouterLink,
       {
-        to: routeName
+        to: { name: name }
       },
-      label
+      () => name
     )
 
 export default defineComponent({
@@ -35,7 +35,7 @@ export default defineComponent({
     console.log(route)
 
     const renderNavOption = (key: string, label: string): MenuOption => ({
-      label: renderRouterLink(label, key),
+      label: renderRouterLink(label),
       key: key,
       disabled: route.name === label
     })
