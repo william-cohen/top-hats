@@ -51,6 +51,10 @@ export default defineComponent({
           }
         }
       },
+      Button: {
+        borderHover: colors['Antique Brass'],
+        textColorHover: colors['Antique Brass']
+      },
       Tag: {
         // textColor: colors['Antique Brass']
         textColorHoverCheckable: colors['Antique Brass'],
