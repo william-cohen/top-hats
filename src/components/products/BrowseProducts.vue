@@ -2,7 +2,7 @@
 import { computed, defineComponent, ref } from 'vue'
 import { NLayout, NLayoutSider, NGrid, NGridItem } from 'naive-ui'
 
-import { useStore } from '@/store'
+import { useProducts } from '@/store/products'
 
 import ProductCard from '../../components/products/cards/ProductCard.vue'
 import ProductFilters, {
@@ -23,7 +23,7 @@ export default defineComponent({
   },
 
   setup() {
-    const store = useStore()
+    const store = useProducts()
 
     const filters = ref<FilterOptions>({
       category: '',

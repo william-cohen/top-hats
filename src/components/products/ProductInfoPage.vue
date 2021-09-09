@@ -11,7 +11,7 @@ import {
   NButton
 } from 'naive-ui'
 
-import { useStore } from '@/store'
+import { useProducts } from '@/store/products'
 
 export default defineComponent({
   name: 'ProductInfoPage',
@@ -35,7 +35,7 @@ export default defineComponent({
   },
 
   setup(props) {
-    const store = useStore()
+    const store = useProducts()
 
     const product = computed(
       () =>
