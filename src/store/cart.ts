@@ -17,14 +17,12 @@ export const useCart = defineStore('cart', {
   actions: {
     addItem(item: Product, quantity: number) {
       if (quantity < 1) return
-      this.basket.push(...Array(quantity).map(() => item))
+      for (let i = 0; i < quantity; i++) {
+        this.basket.push({ ...item })
+      }
     },
-    removeItem(item: Product) {
-      const itemId = item.id
-      this.basket.splice(
-        this.basket.findIndex((item) => item.id === itemId),
-        1
-      )
+    removeItem(index: number) {
+      this.basket.splice(index, 1)
     },
     removeAll() {
       this.basket.length = 0

@@ -1,18 +1,11 @@
 <script lang="ts">
 import { defineComponent, VNodeChild, h, computed, Ref } from 'vue'
 
-import {
-  NButton,
-  NIcon,
-  NPageHeader,
-  NAvatar,
-  NMenu,
-  MenuOption
-} from 'naive-ui'
+import { NPageHeader, NAvatar, NMenu, MenuOption } from 'naive-ui'
 import HatIcon from '../icon/HatIcon.vue'
 import { RouterLink, useRoute } from 'vue-router'
 
-import { ShoppingCart } from '@vicons/fa'
+import CartButton from './cart/CartButton.vue'
 
 const renderRouterLink =
   (name: string): (() => VNodeChild) =>
@@ -36,9 +29,7 @@ export default defineComponent({
     NAvatar,
     NMenu,
     HatIcon,
-    ShoppingCart,
-    NButton,
-    NIcon
+    CartButton
   },
 
   setup(props) {
@@ -77,11 +68,7 @@ export default defineComponent({
     </n-page-header>
     <n-menu mode="horizontal" :indent="18" :options="navOptions" />
     <div class="nav-end">
-      <n-button circle>
-        <template #icon>
-          <n-icon><shopping-cart /></n-icon>
-        </template>
-      </n-button>
+      <cart-button />
     </div>
   </div>
 </template>
@@ -91,5 +78,9 @@ export default defineComponent({
   align-items: center;
   padding: 0 16px;
   grid-template-columns: calc(411px) 1fr auto;
+
+  .nav-end {
+    padding-right: 10px;
+  }
 }
 </style>

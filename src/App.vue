@@ -86,6 +86,9 @@ export default defineComponent({
       },
       Avatar: {
         color: 'white'
+      },
+      Badge: {
+        color: colors.Artichoke
       }
       // ...
     }

@@ -12,6 +12,7 @@ import {
 } from 'naive-ui'
 
 import { useProducts } from '@/store/products'
+import { useCart } from '@/store/cart'
 
 export default defineComponent({
   name: 'ProductInfoPage',
@@ -36,6 +37,7 @@ export default defineComponent({
 
   setup(props) {
     const store = useProducts()
+    const cart = useCart()
 
     const product = computed(
       () =>
@@ -44,9 +46,12 @@ export default defineComponent({
 
     const quantity = ref(1)
 
+    const addToCart = () => cart.addItem(product.value, quantity.value)
+
     return {
       product,
-      quantity
+      quantity,
+      addToCart
     }
   }
 })
@@ -69,7 +74,7 @@ export default defineComponent({
                 :min="1"
                 :max="9"
               />
-              <n-button type="primary">Add to Cart</n-button>
+              <n-button type="primary" @click="addToCart">Add to Cart</n-button>
             </n-space>
           </n-space>
         </n-space>
