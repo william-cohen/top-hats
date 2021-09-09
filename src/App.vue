@@ -53,7 +53,25 @@ export default defineComponent({
       },
       Button: {
         borderHover: colors['Antique Brass'],
-        textColorHover: colors['Antique Brass']
+        textColorHover: colors['Antique Brass'],
+        borderFocus: colors['Antique Brass'],
+        textColorFocus: colors['Antique Brass'],
+        textColorPressed: colors['Desert Sand'],
+        borderPressed: colors['Desert Sand'],
+        colorPrimary: colors['Desert Sand'],
+        borderPrimary: colors['Desert Sand'],
+        colorHoverPrimary: colors['Antique Brass'],
+        borderHoverPrimary: colors['Antique Brass'],
+        colorFocusPrimary: colors['Antique Brass'],
+        borderFocusPrimary: colors['Antique Brass'],
+        colorPressedPrimary: colors['Antique Brass']
+      },
+      Input: {
+        borderHover: colors['Antique Brass'],
+        borderFocus: colors['Antique Brass']
+      },
+      Icon: {
+        color: colors['Antique Brass']
       },
       Tag: {
         // textColor: colors['Antique Brass']

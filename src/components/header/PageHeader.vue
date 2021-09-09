@@ -1,9 +1,18 @@
 <script lang="ts">
 import { defineComponent, VNodeChild, h, computed, Ref } from 'vue'
 
-import { NSpace, NPageHeader, NAvatar, NMenu, MenuOption } from 'naive-ui'
+import {
+  NButton,
+  NIcon,
+  NPageHeader,
+  NAvatar,
+  NMenu,
+  MenuOption
+} from 'naive-ui'
 import HatIcon from '../icon/HatIcon.vue'
 import { RouterLink, useRoute } from 'vue-router'
+
+import { ShoppingCart } from '@vicons/fa'
 
 const renderRouterLink =
   (name: string): (() => VNodeChild) =>
@@ -22,11 +31,14 @@ export default defineComponent({
   // props: {},
 
   components: {
-    NSpace,
+    // NSpace,
     NPageHeader,
     NAvatar,
     NMenu,
-    HatIcon
+    HatIcon,
+    ShoppingCart,
+    NButton,
+    NIcon
   },
 
   setup(props) {
@@ -52,7 +64,7 @@ export default defineComponent({
 })
 </script>
 <template>
-  <n-space class="nav" style="padding: 16px">
+  <div class="nav" style="padding: 16px">
     <n-page-header bordered subtitle="For the distinguished gentleperson">
       <template #title>
         <a style="text-decoration: none; color: inherit"> Top hats </a>
@@ -64,13 +76,20 @@ export default defineComponent({
       </template>
     </n-page-header>
     <n-menu mode="horizontal" :indent="18" :options="navOptions" />
-  </n-space>
+    <div class="nav-end">
+      <n-button circle>
+        <template #icon>
+          <n-icon><shopping-cart /></n-icon>
+        </template>
+      </n-button>
+    </div>
+  </div>
 </template>
 <style lang="scss" scoped>
 .nav {
   display: grid;
-  grid-template-rows: calc(var(--header-height) - 1px);
   align-items: center;
-  padding: 0 var(--side-padding);
+  padding: 0 16px;
+  grid-template-columns: calc(411px) 1fr auto;
 }
 </style>
