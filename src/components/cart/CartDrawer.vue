@@ -106,9 +106,9 @@ export default defineComponent({
         </n-list-item>
         <template #footer>
           <n-statistic label="Total">${{ total }}</n-statistic>
+          <n-button type="primary" class="checkout button">Checkout</n-button>
         </template>
       </n-list>
-      <n-button type="primary" class="checkout button">Checkout</n-button>
     </n-drawer-content>
   </n-drawer>
 </template>
