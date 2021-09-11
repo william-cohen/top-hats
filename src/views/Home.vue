@@ -1,33 +1,17 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-
-import { NSpace, NButton } from 'naive-ui'
-import { useRouter } from 'vue-router'
+import HomePage from '@/components/home/HomePage.vue'
 
 export default defineComponent({
   name: 'Home',
 
   components: {
-    NSpace,
-    NButton
-  },
-
-  setup() {
-    const router = useRouter()
-    const navigateproducts = () => {
-      router.push('products')
-    }
-
-    return {
-      navigateproducts
-    }
+    HomePage
   }
 })
 </script>
 <template>
   <div class="home">
-    <n-space>
-      <n-button @click="navigateproducts">Default</n-button>
-    </n-space>
+    <home-page />
   </div>
 </template>
