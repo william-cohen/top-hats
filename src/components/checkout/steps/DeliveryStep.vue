@@ -43,22 +43,46 @@ export default defineComponent({
         : 'Please enter a correct address.'
     )
 
+    const contactModel = ref({
+      firstName: '',
+      lastName: ''
+    })
+
+    const contactRules = {
+      firstName: [
+        {
+          required: true,
+          message: 'First name is required',
+          trigger: ['input', 'blur']
+        }
+      ],
+      lastName: [
+        {
+          required: true,
+          message: 'Last name is also required',
+          trigger: ['input', 'blur']
+        }
+      ]
+    }
+
     return {
       addressRef,
       addressCompletions,
       addressStatus,
-      addressFeedback
+      addressFeedback,
+      contactModel,
+      contactRules
     }
   }
 })
 </script>
 <template>
-  <n-form ref="contactRef" inline>
-    <n-form-item path="firstname" label="First name">
-      <n-input @keydown.enter.prevent />
+  <n-form :model="contactModel" ref="contactRef" :rules="contactRules" inline>
+    <n-form-item path="firstName" label="First name">
+      <n-input v-model:value="contactModel.firstName" @keydown.enter.prevent />
     </n-form-item>
-    <n-form-item path="lastname" label="Last name">
-      <n-input @keydown.enter.prevent />
+    <n-form-item path="lastName" label="Last name">
+      <n-input v-model:value="contactModel.lastName" @keydown.enter.prevent />
     </n-form-item>
   </n-form>
   <n-form ref="deliveryRef">
@@ -67,6 +91,7 @@ export default defineComponent({
       label="Delivery address"
       :validation-status="addressStatus"
       :feedback="addressFeedback"
+      :required="true"
     >
       <n-auto-complete
         :options="addressCompletions"
