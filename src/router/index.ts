@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Products from '../views/Products.vue'
 import AllProducts from '../views/product/AllProducts.vue'
 import Product from '../views/product/SpecificProduct.vue'
+import Checkout from '../views/Checkout.vue'
 import NotFound from '../views/NotFound.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -31,6 +32,11 @@ const routes: Array<RouteRecordRaw> = [
         component: Product
       }
     ]
+  },
+  {
+    path: '/checkout',
+    name: 'Checkout',
+    component: Checkout
   },
   {
     path: '/:pathMatch(.*)*',

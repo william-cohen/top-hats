@@ -46,8 +46,8 @@ export default defineComponent({
 })
 </script>
 <template>
-  <n-h1>Find your groove, purchase a hat</n-h1>
   <n-image-group :show-toolbar="false">
+    <n-h1>Find your groove, purchase a hat...</n-h1>
     <n-space justify="center">
       <n-space vertical v-for="image in images" :key="image.text">
         <n-image :src="image.src" show-toolbar="false" height="500" />

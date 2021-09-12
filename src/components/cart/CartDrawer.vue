@@ -4,17 +4,14 @@ import { computed, defineComponent } from 'vue'
 import {
   NDrawer,
   NDrawerContent,
-  NList,
-  NListItem,
   NButton,
   NIcon,
-  NImage,
-  NThing,
   NAlert,
   NStatistic
 } from 'naive-ui'
-import { Times, ShoppingBasket } from '@vicons/fa'
+import { ShoppingBasket } from '@vicons/fa'
 import { useCart } from '@/store/cart'
+import CartList from './CartList.vue'
 
 export default defineComponent({
   name: 'CartDrawer',
@@ -33,16 +30,14 @@ export default defineComponent({
   components: {
     NDrawer,
     NDrawerContent,
-    NList,
-    NListItem,
+
     NButton,
     NIcon,
-    NImage,
-    NThing,
+
     NAlert,
     NStatistic,
-    Times,
-    ShoppingBasket
+    ShoppingBasket,
+    CartList
   },
 
   setup(props, context) {
@@ -62,14 +57,11 @@ export default defineComponent({
       }
     })
 
-    const remove = (index: number) => cart.removeItem(index)
-
     return {
       basket,
       empty,
       total,
-      show,
-      remove
+      show
     }
   }
 })
@@ -85,30 +77,10 @@ export default defineComponent({
         </template>
         Browse the store. Add products. Consume!
       </n-alert>
-      <n-list bordered v-else>
-        <n-list-item v-for="(item, i) in basket" :key="i">
-          <n-thing>
-            <template #avatar>
-              <n-image :width="60" :src="item.img" />
-            </template>
-            <template #header> {{ item.title }} </template>
-            <template #header-extra>
-              <n-button text @click="remove(i)">
-                <template #icon>
-                  <n-icon>
-                    <times />
-                  </n-icon>
-                </template>
-              </n-button>
-            </template>
-            <template #description> ${{ item.price }} </template>
-          </n-thing>
-        </n-list-item>
-        <template #footer>
-          <n-statistic label="Total">${{ total }}</n-statistic>
-          <n-button type="primary" class="checkout button">Checkout</n-button>
-        </template>
-      </n-list>
+      <cart-list v-else>
+        <n-statistic label="Total">${{ total }}</n-statistic>
+        <n-button type="primary" class="checkout button">Checkout</n-button>
+      </cart-list>
     </n-drawer-content>
   </n-drawer>
 </template>
