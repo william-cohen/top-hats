@@ -31,7 +31,7 @@ export const useAddressCompletion = (
       .get<CompletionResponse>('autocomplete', {
         query: {
           q: addr,
-          key: 'MFQ93YPXGETJ7DKWLN48',
+          key: 'JBXLDKVA96YM74FERQCT',
           format: 'json',
           max: 7,
           wv: '3.25.0',
@@ -56,7 +56,7 @@ export const useAddressValidation = (
       .get<ValidationResonse>('verification', {
         query: {
           q: addr,
-          key: 'MFQ93YPXGETJ7DKWLN48',
+          key: 'JBXLDKVA96YM74FERQCT',
           format: 'json',
           max: 7,
           wv: '3.25.0',
