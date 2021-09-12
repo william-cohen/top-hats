@@ -3,8 +3,8 @@ import { ref, Ref, watch } from 'vue'
 
 const autoaddress = mande('https://api.addressfinder.io/api/au/address', {
   headers: {
-    origin: 'http://localhost',
-    referer: 'http://localhost'
+    origin: 'https://tophats.website',
+    referer: 'https://tophats.website/'
   }
 })
 

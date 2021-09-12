@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { NSpace, NSteps, NStep, NCard, NButtonGroup, NButton } from 'naive-ui'
 
 import CartStep from './steps/CartStep.vue'
@@ -15,7 +15,7 @@ export default defineComponent({
   components: { NSpace, NSteps, NStep, NCard, NButtonGroup, NButton },
 
   setup() {
-    const current = ref(2)
+    const current = ref(1)
     const currentStatus = ref<'process' | 'finish' | 'error' | 'wait'>(
       'process'
     )
@@ -23,6 +23,8 @@ export default defineComponent({
     const stepComponents = [CartStep, DeliveryStep, PaymentStep, ProcessedStep]
 
     const stepComponent = computed(() => stepComponents[current.value - 1])
+
+    onMounted(() => (current.value = 1))
 
     return {
       current,
@@ -53,7 +55,9 @@ export default defineComponent({
         />
       </n-steps>
       <template #footer>
-        <component :is="stepComponent" />
+        <keep-alive>
+          <component :is="stepComponent" />
+        </keep-alive>
       </template>
       <template #action>
         <n-space justify="space-between">

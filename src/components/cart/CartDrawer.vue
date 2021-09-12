@@ -12,6 +12,7 @@ import {
 import { ShoppingBasket } from '@vicons/fa'
 import { useCart } from '@/store/cart'
 import CartList from './CartList.vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'CartDrawer',
@@ -41,6 +42,7 @@ export default defineComponent({
   },
 
   setup(props, context) {
+    const router = useRouter()
     const cart = useCart()
 
     const basket = computed(() => cart.basket)
@@ -57,11 +59,17 @@ export default defineComponent({
       }
     })
 
+    const checkout = () => {
+      router.push({ name: 'Checkout' })
+      show.value = false
+    }
+
     return {
       basket,
       empty,
       total,
-      show
+      show,
+      checkout
     }
   }
 })
@@ -79,7 +87,9 @@ export default defineComponent({
       </n-alert>
       <cart-list v-else>
         <n-statistic label="Total">${{ total }}</n-statistic>
-        <n-button type="primary" class="checkout button">Checkout</n-button>
+        <n-button type="primary" class="checkout button" @click="checkout">
+          Checkout
+        </n-button>
       </cart-list>
     </n-drawer-content>
   </n-drawer>

@@ -2,6 +2,11 @@ import { defineStore } from 'pinia'
 
 import { Product } from '@/types/products'
 
+interface CartProduct {
+  item: Product
+  quantity: number
+}
+
 export const useCart = defineStore('cart', {
   state: () => ({
     basket: [] as Product[]
