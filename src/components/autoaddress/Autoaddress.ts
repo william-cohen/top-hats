@@ -15,12 +15,7 @@ function debounce<F extends (...args: any) => void, P extends Parameters<F>>(
   } as F
 }
 
-const autoaddress = mande('https://api.geoapify.com/v1/geocode/autocomplete', {
-  headers: {
-    origin: 'https://tophats.website/',
-    referer: 'https://tophats.website/'
-  }
-})
+const autoaddress = mande('https://api.geoapify.com/v1/geocode/autocomplete')
 
 export interface AddressCompletion {
   full_address: string
@@ -43,18 +38,19 @@ export const useAddressCompletion = (
     addressRef,
     debounce((addr) => {
       autoaddress
-        .get<CompletionResponse>('autocomplete', {
+        .get<CompletionResponse>('', {
           query: {
             text: addr,
             apiKey: '91ddc8e67d29406b8852c0195ad59dbf'
           }
         })
-        .then(
-          (response) =>
-            (completions.value = response.features.map((feature) => ({
-              full_address: feature.properties.formatted
-            })))
-        )
+        .then((response) => {
+          console.log(response)
+
+          completions.value = response.features.map((feature) => ({
+            full_address: feature.properties.formatted
+          }))
+        })
     }, 300)
   )
 
@@ -72,7 +68,7 @@ export const useAddressValidation = (
     addressRef,
     debounce((addr) => {
       autoaddress
-        .get<CompletionResponse>('autocomplete', {
+        .get<CompletionResponse>('', {
           query: {
             text: addr,
             apiKey: '91ddc8e67d29406b8852c0195ad59dbf'
