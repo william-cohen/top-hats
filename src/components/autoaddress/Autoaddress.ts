@@ -3,7 +3,7 @@ import { ref, Ref, watch } from 'vue'
 
 function debounce<F extends (...args: any) => void, P extends Parameters<F>>(
   fn: F,
-  delay = 200
+  delay = 400
 ) {
   let timeout: number | null = null
   return function (
@@ -37,11 +37,14 @@ export const useAddressCompletion = (
 ): { completions: Readonly<Ref<AddressCompletion[]>> } => {
   const completions = ref<AddressCompletion[]>([])
 
-  watch(addressRef, (addr) => {
-    autocomplete
-      .get<CompletionResponse>(addr)
-      .then((response) => (completions.value = response.completions))
-  })
+  watch(
+    addressRef,
+    debounce((addr) => {
+      autocomplete
+        .get<CompletionResponse>(addr)
+        .then((response) => (completions.value = response.completions))
+    })
+  )
 
   return {
     completions: completions as Readonly<Ref<AddressCompletion[]>>
@@ -53,11 +56,14 @@ export const useAddressValidation = (
 ): { isValid: Readonly<Ref<boolean>> } => {
   const isValid = ref<boolean>(false)
 
-  watch(addressRef, (addr) => {
-    verify
-      .get<ValidationResonse>(addr)
-      .then((response) => (isValid.value = response.matched))
-  })
+  watch(
+    addressRef,
+    debounce((addr) => {
+      verify
+        .get<ValidationResonse>(addr)
+        .then((response) => (isValid.value = response.matched))
+    })
+  )
 
   return {
     isValid: isValid as Readonly<Ref<boolean>>
