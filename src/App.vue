@@ -111,7 +111,7 @@ export default defineComponent({
         </div>
       </n-layout-content>
       <n-layout-footer position="absolute" bordered>
-        <n-space justify="center">Genertic Footer</n-space>
+        <n-space justify="center">Secure Electronic Commerce (2150)</n-space>
       </n-layout-footer>
     </n-layout>
   </n-config-provider>
