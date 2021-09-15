@@ -1,7 +1,16 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 
-import { NImage, NThing, NList, NListItem, NButton, NIcon } from 'naive-ui'
+import {
+  NImage,
+  NThing,
+  NList,
+  NListItem,
+  NButton,
+  NIcon,
+  NSpace,
+  NInputNumber
+} from 'naive-ui'
 import { Times } from '@vicons/fa'
 
 import { useCart } from '@/store/cart'
@@ -18,7 +27,9 @@ export default defineComponent({
     NList,
     NListItem,
     NButton,
-    NIcon
+    NIcon,
+    NSpace,
+    NInputNumber
   },
 
   setup() {
@@ -29,6 +40,7 @@ export default defineComponent({
     const remove = (index: number) => cart.removeItem(index)
 
     return {
+      cart,
       basket,
       remove
     }
@@ -37,12 +49,12 @@ export default defineComponent({
 </script>
 <template>
   <n-list bordered>
-    <n-list-item v-for="(item, i) in basket" :key="i">
+    <n-list-item v-for="(entry, i) in basket" :key="i">
       <n-thing>
         <template #avatar>
-          <n-image :width="60" :src="item.img" />
+          <n-image :width="60" :src="entry.item.img" />
         </template>
-        <template #header> {{ item.title }} </template>
+        <template #header> {{ entry.item.title }} </template>
         <template #header-extra>
           <n-button text @click="remove(i)">
             <template #icon>
@@ -52,7 +64,19 @@ export default defineComponent({
             </template>
           </n-button>
         </template>
-        <template #description> ${{ item.price }} </template>
+        <template #description>
+          <n-input-number
+            placeholder="Quantity"
+            :min="1"
+            :max="9"
+            v-model:value="cart.basket[i].quantity"
+            size="small"
+            class="cart quantity"
+          />
+        </template>
+        <template #footer>
+          <n-space> ${{ entry.item.price * entry.quantity }} </n-space>
+        </template>
       </n-thing>
     </n-list-item>
     <template #footer>
@@ -60,3 +84,8 @@ export default defineComponent({
     </template>
   </n-list>
 </template>
+<style lang="scss" scoped>
+.cart.quantity {
+  width: 170px;
+}
+</style>
