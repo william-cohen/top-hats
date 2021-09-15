@@ -15,18 +15,21 @@ function debounce<F extends (...args: any) => void, P extends Parameters<F>>(
   } as F
 }
 
-const autoaddress = mande('https://api.geoapify.com/v1/geocode/autocomplete')
+const autocomplete = mande('/address/autocomplete')
+
+const verify = mande('/address/verify')
 
 export interface AddressCompletion {
   full_address: string
 }
 
 interface CompletionResponse {
-  features: {
-    properties: {
-      formatted: string
-    }
-  }[]
+  completions: AddressCompletion[]
+}
+
+interface ValidationResonse {
+  success: boolean
+  matched: boolean
 }
 
 export const useAddressCompletion = (
@@ -34,25 +37,11 @@ export const useAddressCompletion = (
 ): { completions: Readonly<Ref<AddressCompletion[]>> } => {
   const completions = ref<AddressCompletion[]>([])
 
-  watch(
-    addressRef,
-    debounce((addr) => {
-      autoaddress
-        .get<CompletionResponse>('', {
-          query: {
-            text: addr,
-            apiKey: '91ddc8e67d29406b8852c0195ad59dbf'
-          }
-        })
-        .then((response) => {
-          console.log(response)
-
-          completions.value = response.features.map((feature) => ({
-            full_address: feature.properties.formatted
-          }))
-        })
-    }, 300)
-  )
+  watch(addressRef, (addr) => {
+    autocomplete
+      .get<CompletionResponse>(addr)
+      .then((response) => (completions.value = response.completions))
+  })
 
   return {
     completions: completions as Readonly<Ref<AddressCompletion[]>>
@@ -64,21 +53,11 @@ export const useAddressValidation = (
 ): { isValid: Readonly<Ref<boolean>> } => {
   const isValid = ref<boolean>(false)
 
-  watch(
-    addressRef,
-    debounce((addr) => {
-      autoaddress
-        .get<CompletionResponse>('', {
-          query: {
-            text: addr,
-            apiKey: '91ddc8e67d29406b8852c0195ad59dbf'
-          }
-        })
-        .then((response) => {
-          isValid.value = response.features.length < 3
-        })
-    }, 300)
-  )
+  watch(addressRef, (addr) => {
+    verify
+      .get<ValidationResonse>(addr)
+      .then((response) => (isValid.value = response.matched))
+  })
 
   return {
     isValid: isValid as Readonly<Ref<boolean>>
