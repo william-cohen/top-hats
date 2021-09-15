@@ -68,7 +68,6 @@ export default defineComponent({
           <n-input-number
             placeholder="Quantity"
             :min="1"
-            :max="9"
             v-model:value="cart.basket[i].quantity"
             size="small"
             class="cart quantity"
