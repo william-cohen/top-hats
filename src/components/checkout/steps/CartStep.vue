@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, onActivated } from 'vue'
 
 import { NH1, NList, NListItem, NThing } from 'naive-ui'
 
@@ -9,16 +9,23 @@ import { useCart } from '@/store/cart'
 export default defineComponent({
   name: 'CartStep',
 
-  components: { CartList, NH1, NList, NListItem, NThing },
-
-  emits: {
-    valid: (isValid: boolean) => typeof isValid === 'boolean'
+  props: {
+    valid: {
+      required: true,
+      type: Boolean
+    }
   },
 
-  setup() {
+  emits: {
+    'update:valid': (isValid: boolean) => typeof isValid === 'boolean'
+  },
+
+  components: { CartList, NH1, NList, NListItem, NThing },
+
+  setup(_, context) {
     const cart = useCart()
 
-    const items = cart.totalItems
+    const items = computed(() => cart.totalItems)
     const quantifier = computed(() =>
       cart.totalItems === 1 ? 'item' : 'items'
     )
@@ -26,6 +33,8 @@ export default defineComponent({
     const total = computed(() => `$${cart.totalPrice.toFixed(2)}`)
     const subtotal = computed(() => `$${(cart.totalPrice * 0.9).toFixed(2)}`)
     const gst = computed(() => `$${(cart.totalPrice * 0.1).toFixed(2)}`)
+
+    onActivated(() => context.emit('update:valid', true))
 
     return {
       items,

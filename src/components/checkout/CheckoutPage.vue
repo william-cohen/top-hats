@@ -21,15 +21,22 @@ export default defineComponent({
     )
 
     const stepComponents = [CartStep, DeliveryStep, PaymentStep, ProcessedStep]
-
     const stepComponent = computed(() => stepComponents[current.value - 1])
+    const stepValid = ref(false)
 
     onMounted(() => (current.value = 1))
+
+    const next = () => {
+      if (!stepValid.value) return
+      current.value++
+    }
 
     return {
       current,
       currentStatus,
-      stepComponent
+      stepComponent,
+      stepValid,
+      next
     }
   }
 })
@@ -56,13 +63,15 @@ export default defineComponent({
       </n-steps>
       <template #footer>
         <keep-alive>
-          <component :is="stepComponent" />
+          <component :is="stepComponent" v-model:valid="stepValid" />
         </keep-alive>
       </template>
       <template #action>
         <n-space justify="space-between">
           <n-button @click="current--">Back</n-button>
-          <n-button type="primary" @click="current++">Next</n-button>
+          <n-button type="primary" @click="next" :disabled="!stepValid">
+            Next
+          </n-button>
         </n-space>
       </template>
     </n-card>

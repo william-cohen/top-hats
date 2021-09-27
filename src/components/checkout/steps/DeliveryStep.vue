@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onActivated, ref, watch } from 'vue'
 import { NForm, NFormItem, NInput, NAutoComplete } from 'naive-ui'
 
 import {
@@ -10,6 +10,17 @@ import {
 export default defineComponent({
   name: 'DeliveryStep',
 
+  props: {
+    valid: {
+      required: true,
+      type: Boolean
+    }
+  },
+
+  emits: {
+    'update:valid': (isValid: boolean) => typeof isValid === 'boolean'
+  },
+
   components: {
     NForm,
     NFormItem,
@@ -17,11 +28,7 @@ export default defineComponent({
     NAutoComplete
   },
 
-  emits: {
-    valid: (isValid: boolean) => typeof isValid === 'boolean'
-  },
-
-  setup() {
+  setup(_, context) {
     const addressRef = ref('')
     const { completions } = useAddressCompletion(addressRef)
     const { isValid } = useAddressValidation(addressRef)
@@ -64,6 +71,17 @@ export default defineComponent({
         }
       ]
     }
+
+    const formValid = computed(
+      () =>
+        contactModel.value.firstName.length > 0 &&
+        contactModel.value.lastName.length > 0 &&
+        isValid.value
+    )
+
+    watch(formValid, (valid) => context.emit('update:valid', valid))
+
+    onActivated(() => context.emit('update:valid', formValid.value))
 
     return {
       addressRef,
