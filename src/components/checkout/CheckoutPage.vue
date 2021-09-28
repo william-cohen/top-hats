@@ -24,7 +24,7 @@ export default defineComponent({
     const stepComponent = computed(() => stepComponents[current.value - 1])
     const stepValid = ref(false)
 
-    onMounted(() => (current.value = 1))
+    onMounted(() => (current.value = 3))
 
     const next = () => {
       if (!stepValid.value) return
