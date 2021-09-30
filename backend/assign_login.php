@@ -1,0 +1,40 @@
+<?php
+/**
+	Assumptions:
+		password is hashed by the front end
+**/
+	$user = $_POST['username'];
+	$pass = $_POST['password'];
+	$userCheck = false;
+	$passCheck = false;
+	
+	$serverAddress = "localhost";
+	$serverUser = "root";
+	$serverPass = "password";
+	$con = new mysqli($serverAddress, $serverUser, $serverPass);
+	
+	if(mysqli_connect_errno())
+	{
+		$return = array('connection' => false);
+	}
+	else
+	{
+		$con-> select_db("tophats");
+		$sql = "SELECT * FROM user WHERE username='$user'";
+		$result = mysqli_query($con, $sql);
+		
+		if(mysqli_num_rows($result) == 1)
+		{
+			$userCheck = true;
+			$row = mysqli_fetch_array($result);
+			if($row['password'] == $pass)
+			{
+				$passCheck = true;
+			}
+		}
+		$return = array('username' => $user, 'userOutcome'=> $userCheck, 'PassOutcome' => $passCheck);
+	}
+	mysqli_close($con);
+	$return = json_encode($return);
+	echo $return;
+?>
