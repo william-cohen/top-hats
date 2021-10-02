@@ -6,6 +6,7 @@ import HatIcon from '../icon/HatIcon.vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 import CartButton from './cart/CartButton.vue'
+import LoginButton from './login/LoginButton.vue'
 
 const renderRouterLink =
   (name: string): (() => VNodeChild) =>
@@ -29,7 +30,8 @@ export default defineComponent({
     NAvatar,
     NMenu,
     HatIcon,
-    CartButton
+    CartButton,
+    LoginButton
   },
 
   setup(props) {
@@ -68,6 +70,7 @@ export default defineComponent({
     </n-page-header>
     <n-menu mode="horizontal" :indent="18" :options="navOptions" />
     <div class="nav-end">
+      <login-button />
       <cart-button />
     </div>
   </div>

@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Products from '../views/Products.vue'
 import AllProducts from '../views/product/AllProducts.vue'
 import Product from '../views/product/SpecificProduct.vue'
+import Login from '../views/Login.vue'
 import Checkout from '../views/Checkout.vue'
 import NotFound from '../views/NotFound.vue'
 
@@ -34,9 +35,17 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
+  {
     path: '/checkout',
     name: 'Checkout',
-    component: Checkout
+    component: Checkout,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/:pathMatch(.*)*',
