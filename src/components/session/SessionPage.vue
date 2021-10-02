@@ -46,8 +46,8 @@ export default defineComponent({
     const login = async () => {
       loading.value = true
       const result = await session.login(model.value)
-      if (result === Result.ERROR) {
-        errorText.value = 'Incorrect login. Try again'
+      if (result instanceof Error) {
+        errorText.value = result.message
       } else {
         router.push({ name: 'Products' })
       }
@@ -57,8 +57,8 @@ export default defineComponent({
     const signUp = async () => {
       loading.value = true
       const result = await session.signUp(model.value)
-      if (result === Result.ERROR) {
-        errorText.value = 'Those details are not available'
+      if (result instanceof Error) {
+        errorText.value = result.message
       } else {
         router.push({ name: 'Products' })
       }

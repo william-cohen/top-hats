@@ -1,10 +1,7 @@
 import { backend } from '@/api/backend'
 import { defineStore } from 'pinia'
 
-export enum Result {
-  SUCCESS,
-  ERROR
-}
+export type Result = 'Success' | Error
 
 export const useSession = defineStore('session', {
   state: () => ({
@@ -20,23 +17,49 @@ export const useSession = defineStore('session', {
       username: string
       password: string
     }): Promise<Result> {
-      // Fancy JS sleep
-      await new Promise<void>((resolve) => {
-        setTimeout(resolve, 2000)
-      })
+      const result = await backend<{
+        username: string
+        userOutcome: boolean
+        PassOutcome: boolean
+      }>('assign_login.php', credentials)
+
+      console.log('Login result', result)
+
+      if (result instanceof Error) {
+        return result
+      }
+
+      if (!result.userOutcome) {
+        return Error('Unkown username.')
+      }
+
+      if (!result.PassOutcome) {
+        return Error('Incorrect password.')
+      }
+
       this.loggedIn = true
       this.userName = credentials.username
-
-      const result = await backend('assign_echo.php', credentials)
-
-      console.log('Backend test', result)
-      return Result.SUCCESS
+      return 'Success'
     },
     /**
      * Stub sign-up action
      */
     async signUp(credentials: { username: string; password: string }) {
-      // Stub register
+      const result = await backend<{ username: string; outcome: boolean }>(
+        'assign_register.php',
+        credentials
+      )
+
+      console.log('Register result', result)
+
+      if (result instanceof Error) {
+        return result
+      }
+
+      if (!result.outcome) {
+        return Error('Username already taken. You can login instead')
+      }
+
       return await this.login(credentials)
     }
   }
