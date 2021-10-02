@@ -11,7 +11,7 @@ import {
   NInput,
   NAlert
 } from 'naive-ui'
-import { Result, useSession } from '@/store/session'
+import { useSession } from '@/store/session'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({
@@ -31,7 +31,7 @@ export default defineComponent({
     NAlert
   },
 
-  setup(props) {
+  setup() {
     const router = useRouter()
     const session = useSession()
 

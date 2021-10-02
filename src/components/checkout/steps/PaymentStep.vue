@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watchEffect } from 'vue'
 
 import {
   NForm,
@@ -7,9 +7,17 @@ import {
   NFormItemGi,
   NSpace,
   NInput,
-  NInputNumber,
-  FormItemRule
+  FormItemRule,
+  FormValidationError,
+  NAlert
 } from 'naive-ui'
+
+type NFormElement = {
+  validate: (
+    validateCallback?: (errors?: Array<FormValidationError>) => void,
+    shouldRuleBeApplied?: (arg: FormItemRule) => boolean
+  ) => Promise<void>
+}
 
 const luhnCheck = (val: string) => {
   let checksum = 0 // running checksum total
@@ -56,13 +64,13 @@ export default defineComponent({
     'update:valid': (isValid: boolean) => typeof isValid === 'boolean'
   },
 
-  components: { NForm, NSpace, NGrid, NFormItemGi, NInput, NInputNumber },
+  components: { NForm, NSpace, NGrid, NFormItemGi, NInput, NAlert },
 
   setup(_, context) {
     const paymentModel = ref({
       cardNumber: '',
-      expMonth: 1,
-      expYear: 2000,
+      expMonth: '',
+      expYear: '',
       cvv: ''
     })
 
@@ -71,7 +79,7 @@ export default defineComponent({
         {
           required: true,
           message: 'A credit-card is required.',
-          trigger: ['input', 'blur']
+          trigger: ['blur']
         },
         {
           message: 'This credit card no. is incomplete',
@@ -120,34 +128,118 @@ export default defineComponent({
         {
           required: true,
           message: 'Please enter a month',
-          trigger: ['input', 'blur']
+          trigger: ['blur']
+        },
+        {
+          trigger: ['blur'],
+          validator(rule: unknown, value: unknown) {
+            const month = Number(value)
+            if (isNaN(month)) {
+              return new Error('Needs to be a valid month')
+            }
+
+            if (month < 1 || month > 12) {
+              return new Error('Needs to be within 1-12')
+            }
+
+            return true
+          }
         }
       ],
       expYear: [
         {
           required: true,
           message: 'A valid year is required',
-          trigger: ['input', 'blur']
+          trigger: ['blur']
+        },
+        {
+          trigger: ['blur'],
+          validator(rule: unknown, value: unknown) {
+            const year = Number(value)
+            if (isNaN(year)) {
+              return new Error('Needs to be a valid year')
+            }
+
+            if (year < 2021) {
+              return new Error('Expired year')
+            }
+
+            return true
+          }
+        },
+        {
+          trigger: ['blur'],
+          validator(rule: unknown, value: unknown) {
+            const month = Number(paymentModel.value.expMonth)
+            const year = Number(paymentModel.value.expYear)
+            const expiry = new Date()
+            expiry.setFullYear(year, month, 1)
+            const today = new Date()
+
+            if (today > expiry) {
+              return new Error('This card is expired.')
+            }
+
+            return true
+          }
         }
       ],
       cvv: [
         {
-          required: true,
           message: 'A valid CVV is required',
           trigger: ['input', 'blur']
+        },
+        {
+          trigger: ['blur'],
+          validator(rule: unknown, value: unknown) {
+            const cvv = Number(value)
+
+            if (isNaN(cvv)) {
+              return new Error('CVV is invalid')
+            }
+
+            if (cvv < 100 || cvv > 999) {
+              return new Error('CVV is invalid')
+            }
+
+            return true
+          }
         }
       ]
     }
 
+    const errorText = ref('Aaa')
+
+    const paymentRef = ref<NFormElement | null>(null)
+
+    watchEffect(() => {
+      paymentRef.value?.validate((errors) => {
+        errorText.value = ''
+        if (errors) {
+          const first = errors[0]
+          const error = first[0]
+          errorText.value = error.message || ''
+        }
+        context.emit('update:valid', !errors || errors?.length === 0)
+      })
+    })
+
     return {
+      paymentRef,
       paymentModel,
-      paymentRules
+      paymentRules,
+      errorText
     }
   }
 })
 </script>
 <template>
-  <n-form :model="paymentModel" ref="paymentRef" :rules="paymentRules">
+  <n-form
+    :model="paymentModel"
+    ref="paymentRef"
+    :rules="paymentRules"
+    :show-feedback="false"
+  >
     <n-space justify="center">
       <n-grid :cols="24" :x-gap="24">
         <n-form-item-gi :span="12" path="cardNumber" label="Card no.">
@@ -157,27 +249,27 @@ export default defineComponent({
           />
         </n-form-item-gi>
         <n-form-item-gi :span="4" path="expMonth" label="Exp. month">
-          <n-input-number
-            :show-button="false"
+          <n-input
             v-model:value="paymentModel.expMonth"
+            placeholder="3"
             @keydown.enter.prevent
           />
         </n-form-item-gi>
         <n-form-item-gi :span="4" path="expYear" label="Exp. year">
-          <n-input-number
-            :show-button="false"
+          <n-input
             v-model:value="paymentModel.expYear"
+            placeholder="2024"
             @keydown.enter.prevent
           />
         </n-form-item-gi>
         <n-form-item-gi :span="5" path="cvv" label="CVV">
-          <n-input-number
-            :show-button="false"
-            v-model:value="paymentModel.cvv"
-            @keydown.enter.prevent
-          />
+          <n-input v-model:value="paymentModel.cvv" @keydown.enter.prevent />
         </n-form-item-gi>
       </n-grid>
     </n-space>
+    <br />
+    <n-alert v-if="errorText" title="Payment info" type="warning">{{
+      errorText
+    }}</n-alert>
   </n-form>
 </template>
