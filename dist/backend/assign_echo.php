@@ -4,5 +4,5 @@
   - Will
 **/
 	$return = array('foo' => 'bar', 'outcome' => true);
-	echo $return;
+	echo json_encode($return);
 ?>
