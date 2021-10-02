@@ -1,5 +1,9 @@
-import { backend } from '@/api/backend'
 import { defineStore } from 'pinia'
+
+import Crypto from 'crypto-js'
+// import JSEncrypt from 'jsencrypt'
+
+import { backend } from '@/api/backend'
 
 export type Result = 'Success' | Error
 
@@ -17,13 +21,18 @@ export const useSession = defineStore('session', {
       username: string
       password: string
     }): Promise<Result> {
+      const loginInfo = {
+        username: credentials.username,
+        password: Crypto.SHA256(credentials.password).toString()
+      }
+
+      console.log('HASHED STUFF ', loginInfo)
+
       const result = await backend<{
         username: string
         userOutcome: boolean
         PassOutcome: boolean
-      }>('assign_login.php', credentials)
-
-      console.log('Login result', result)
+      }>('assign_login.php', loginInfo)
 
       if (result instanceof Error) {
         return result
@@ -45,12 +54,15 @@ export const useSession = defineStore('session', {
      * Stub sign-up action
      */
     async signUp(credentials: { username: string; password: string }) {
+      const signupInfo = {
+        username: credentials.username,
+        password: Crypto.SHA256(credentials.password).toString()
+      }
+
       const result = await backend<{ username: string; outcome: boolean }>(
         'assign_register.php',
-        credentials
+        signupInfo
       )
-
-      console.log('Register result', result)
 
       if (result instanceof Error) {
         return result
