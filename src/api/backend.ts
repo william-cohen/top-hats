@@ -7,7 +7,7 @@ export const backend = async <T>(
   for (const pair of Object.entries(data)) {
     formData.append(pair[0], pair[1])
   }
-  const request = await fetch('/backend/assign_echo.php', {
+  const request = await fetch(`/backend/${target}`, {
     method: 'POST',
     body: formData
   })
