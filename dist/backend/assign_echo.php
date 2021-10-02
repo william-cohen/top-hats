@@ -3,6 +3,5 @@
 	JUST A TEST ECHO FOR MYSELF
   - Will
 **/
-	$return = array('foo' => 'bar', 'outcome' => true);
-	echo json_encode($return);
+	echo json_encode($_POST);
 ?>
