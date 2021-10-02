@@ -263,7 +263,11 @@ export default defineComponent({
           />
         </n-form-item-gi>
         <n-form-item-gi :span="5" path="cvv" label="CVV">
-          <n-input v-model:value="paymentModel.cvv" @keydown.enter.prevent />
+          <n-input
+            v-model:value="paymentModel.cvv"
+            placeholder="123"
+            @keydown.enter.prevent
+          />
         </n-form-item-gi>
       </n-grid>
     </n-space>
