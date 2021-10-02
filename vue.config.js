@@ -5,6 +5,10 @@ module.exports = {
       '^/address/': {
         target: 'https://tophats.website/address/',
         changeOrigin: true
+      },
+      '^/backend/': {
+        target: 'https://tophats.website/',
+        changeOrigin: true
       }
     }
   }

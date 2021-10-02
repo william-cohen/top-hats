@@ -1,8 +1,5 @@
+import { backend } from '@/api/backend'
 import { defineStore } from 'pinia'
-
-import { mande } from 'mande'
-
-const backend = mande('/backend')
 
 export enum Result {
   SUCCESS,
@@ -29,6 +26,10 @@ export const useSession = defineStore('session', {
       })
       this.loggedIn = true
       this.userName = credentials.username
+
+      const result = await backend('assign_echo.php', credentials)
+
+      console.log('Backend test', result)
       return Result.SUCCESS
     },
     /**
