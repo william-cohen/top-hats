@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 
 import { NLayout, NLayoutHeader, NCard } from 'naive-ui'
 

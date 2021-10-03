@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { NLayout, NLayoutSider, NGrid, NGridItem } from 'naive-ui'
 
 import { useProducts, Product } from '@/store/products'

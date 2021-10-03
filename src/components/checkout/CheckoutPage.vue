@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { NSpace, NSteps, NStep, NCard, NButtonGroup, NButton } from 'naive-ui'
 
 import CartStep from './steps/CartStep.vue'
