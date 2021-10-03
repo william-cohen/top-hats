@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-import { Product } from '@/types/products'
+import { Product } from '@/store/products'
 
 interface CartEntry {
   item: Product
@@ -35,7 +35,7 @@ export const useCart = defineStore('cart', {
         this.basket.push({ item: { ...item }, quantity })
       }
     },
-    updateQuantity(itemId: number, newQuantity: number) {
+    updateQuantity(itemId: string, newQuantity: number) {
       const existingProduct = this.basket.find(
         (entry) => entry.item.id === itemId
       )

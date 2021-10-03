@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 
 import { NCard } from 'naive-ui'
 
-import { Product } from '@/types/products'
+import { Product } from '@/store/products'
 
 export default defineComponent({
   name: 'ProductCard',

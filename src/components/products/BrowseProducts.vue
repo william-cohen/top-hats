@@ -2,13 +2,12 @@
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { NLayout, NLayoutSider, NGrid, NGridItem } from 'naive-ui'
 
-import { useProducts } from '@/store/products'
+import { useProducts, Product } from '@/store/products'
 
 import ProductCard from '../../components/products/cards/ProductCard.vue'
 import ProductFilters, {
   FilterOptions
 } from '../../components/products/filters/ProductFilters.vue'
-import { Product } from '@/types/products'
 
 export default defineComponent({
   name: 'BrowseProducts',
@@ -30,7 +29,7 @@ export default defineComponent({
     const filters = ref<FilterOptions>({
       category: '',
       color: '',
-      priceRange: [1, 800]
+      priceRange: [1, 500]
     })
 
     const categoryFilter = (product: Product) => true //product.type.includes(filters.value.category)
