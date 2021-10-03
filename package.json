@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && mkdir ./dist/backend && cp ./src/backend/*.php ./dist/backend",
+    "build": "vue-cli-service build && mkdir ./dist/backend && cp ./src/backend/*.php ./src/backend/*.jpg ./src/backend/*.png ./dist/backend",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
