@@ -27,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
         component: AllProducts
       },
       {
-        path: '/products/:productName',
+        path: '/products/:productId',
         props: true,
         name: 'Product',
         component: Product

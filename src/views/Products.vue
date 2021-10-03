@@ -1,7 +1,9 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent, onMounted } from 'vue'
 
 import { NLayout, NLayoutHeader, NCard } from 'naive-ui'
+
+import { useProducts } from '@/store/products'
 
 import BreadCrumb from '@/components/navigation/BreadCrumb.vue'
 
@@ -15,9 +17,12 @@ export default defineComponent({
     NLayoutHeader,
     NCard,
     BreadCrumb
-  }
+  },
 
-  // setup(props) {}
+  setup() {
+    const store = useProducts()
+    onMounted(() => store.fetchProducts())
+  }
 })
 </script>
 <template>

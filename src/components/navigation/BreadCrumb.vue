@@ -3,6 +3,7 @@ import { computed, defineComponent } from 'vue'
 
 import { NBreadcrumb, NBreadcrumbItem } from 'naive-ui'
 import { useRoute, useRouter } from 'vue-router'
+import { useProducts } from '@/store/products'
 
 export default defineComponent({
   name: 'BreadCrumb',
@@ -17,8 +18,13 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const route = useRoute()
+    const products = useProducts()
 
-    const productName = computed(() => route.params['productName'])
+    const productName = computed(
+      () =>
+        products.items.find((p) => p.id === route.params['productId'])?.title ||
+        'Hat'
+    )
 
     const navigateTo = (name: string) => router.push({ name })
 

@@ -30,7 +30,7 @@ export default defineComponent({
     const click = () =>
       router.push({
         name: 'Product',
-        params: { productName: props.product.title }
+        params: { productId: props.product.id }
       })
 
     return {

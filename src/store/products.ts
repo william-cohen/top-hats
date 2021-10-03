@@ -43,6 +43,8 @@ export const useProducts = defineStore('products', {
         })
       )
 
+      this.loaded = true
+
       return 'Success'
     }
   }

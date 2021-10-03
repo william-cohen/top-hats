@@ -7,7 +7,7 @@ export default defineComponent({
   name: 'SpecificProduct',
 
   props: {
-    productName: {
+    productId: {
       required: true,
       type: String
     }
@@ -17,5 +17,5 @@ export default defineComponent({
 })
 </script>
 <template>
-  <product-info-page :productName="productName" />
+  <product-info-page :productId="productId" />
 </template>

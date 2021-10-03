@@ -8,7 +8,8 @@ import {
   NSpace,
   NImage,
   NInputNumber,
-  NButton
+  NButton,
+  NText
 } from 'naive-ui'
 
 import { useProducts } from '@/store/products'
@@ -18,7 +19,7 @@ export default defineComponent({
   name: 'ProductInfoPage',
 
   props: {
-    productName: {
+    productId: {
       required: true,
       type: String
     }
@@ -32,16 +33,18 @@ export default defineComponent({
     NSpace,
     NImage,
     NInputNumber,
-    NButton
+    NButton,
+    NText
   },
 
   setup(props) {
     const store = useProducts()
     const cart = useCart()
 
+    const loaded = computed(() => store.loaded)
+
     const product = computed(
-      () =>
-        store.items.find((i) => i.title === props.productName) || store.items[0]
+      () => store.items.find((i) => i.id === props.productId) || store.items[0]
     )
 
     const quantity = ref(1)
@@ -49,6 +52,7 @@ export default defineComponent({
     const addToCart = () => cart.addItem(product.value, quantity.value)
 
     return {
+      loaded,
       product,
       quantity,
       addToCart
@@ -57,7 +61,7 @@ export default defineComponent({
 })
 </script>
 <template>
-  <n-space justify="center">
+  <n-space justify="center" v-if="loaded">
     <n-grid x-gap="12" :cols="2">
       <n-grid-item>
         <n-image width="500" :src="product.img" />
@@ -68,6 +72,7 @@ export default defineComponent({
             <n-space vertical justify="center" class="center text">
               <n-h1>{{ product.title }}</n-h1>
               <n-h2>${{ product.price }}</n-h2>
+              <n-text tag="div">{{ product.description }}</n-text>
               <n-input-number
                 v-model:value="quantity"
                 placeholder="Quantity"

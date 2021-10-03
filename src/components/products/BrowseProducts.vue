@@ -24,8 +24,6 @@ export default defineComponent({
   setup() {
     const store = useProducts()
 
-    onMounted(() => store.fetchProducts())
-
     const filters = ref<FilterOptions>({
       sortBy: 'none',
       priceRange: [1, 500]
