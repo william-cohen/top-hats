@@ -1,11 +1,10 @@
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, watch } from 'vue'
+import { computed, defineComponent, PropType } from 'vue'
 
-import { NForm, NH3, NH6, NSpace, NTag, NSlider } from 'naive-ui'
+import { NForm, NH3, NH6, NRadioGroup, NRadioButton, NSlider } from 'naive-ui'
 
 export interface FilterOptions {
-  category: 'table' | 'sofa' | 'lamp' | 'chair' | ''
-  color: 'yellow' | 'blue' | 'white' | 'red' | ''
+  sortBy: 'title' | 'price' | 'none'
   priceRange: [number, number]
 }
 
@@ -27,8 +26,8 @@ export default defineComponent({
     NForm,
     NH3,
     NH6,
-    NTag,
-    NSpace,
+    NRadioGroup,
+    NRadioButton,
     NSlider
   },
 
@@ -42,17 +41,8 @@ export default defineComponent({
       }
     })
 
-    const setCategory = (newCategory: 'table' | 'sofa' | 'lamp' | 'chair') =>
-      (filters.value.category =
-        filters.value.category === newCategory ? '' : newCategory)
-
-    const setColor = (newColor: 'yellow' | 'blue' | 'white' | 'red') =>
-      (filters.value.color = filters.value.color === newColor ? '' : newColor)
-
     return {
-      filters,
-      setCategory,
-      setColor
+      filters
     }
   }
 })
@@ -60,69 +50,12 @@ export default defineComponent({
 <template>
   <n-form :model="filters">
     <n-h3>Filters</n-h3>
-    <n-h6>Category</n-h6>
-    <n-space vertical>
-      <n-tag
-        checkable
-        :checked="filters.category === 'table'"
-        @click="setCategory('table')"
-      >
-        Table
-      </n-tag>
-      <n-tag
-        checkable
-        :checked="filters.category === 'sofa'"
-        @click="setCategory('sofa')"
-      >
-        Sofa
-      </n-tag>
-      <n-tag
-        checkable
-        :checked="filters.category === 'lamp'"
-        @click="setCategory('lamp')"
-      >
-        Lamp
-      </n-tag>
-      <n-tag
-        checkable
-        :checked="filters.category === 'chair'"
-        @click="setCategory('chair')"
-      >
-        Chair
-      </n-tag>
-    </n-space>
-    <n-h6>Color</n-h6>
-    <n-space>
-      <n-tag
-        checkable
-        :checked="filters.color === 'yellow'"
-        @click="setColor('yellow')"
-      >
-        Yellow
-      </n-tag>
-      <n-tag
-        checkable
-        :checked="filters.color === 'blue'"
-        @click="setColor('blue')"
-      >
-        Blue
-      </n-tag>
-      <n-tag
-        checkable
-        :checked="filters.color === 'white'"
-        @click="setColor('white')"
-      >
-        White
-      </n-tag>
-      <n-tag
-        type="error"
-        checkable
-        :checked="filters.color === 'red'"
-        @click="setColor('red')"
-      >
-        Red
-      </n-tag>
-    </n-space>
+    <n-h6>Sort by</n-h6>
+    <n-radio-group v-model:value="filters.sortBy" name="radiobuttongroup1">
+      <n-radio-button value="none"> None </n-radio-button>
+      <n-radio-button value="title"> Title </n-radio-button>
+      <n-radio-button value="price"> Price </n-radio-button>
+    </n-radio-group>
     <n-h6>Price</n-h6>
     <n-slider
       v-model:value="filters.priceRange"

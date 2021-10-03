@@ -27,21 +27,31 @@ export default defineComponent({
     onMounted(() => store.fetchProducts())
 
     const filters = ref<FilterOptions>({
-      category: '',
-      color: '',
+      sortBy: 'none',
       priceRange: [1, 500]
     })
-
-    const categoryFilter = (product: Product) => true //product.type.includes(filters.value.category)
-
-    const colorFilter = (product: Product) => true //product.color.includes(filters.value.color)
 
     const priceFilter = (product: Product) =>
       product.price >= filters.value.priceRange[0] &&
       product.price <= filters.value.priceRange[1]
 
+    const sortBy =
+      () =>
+      (a: Product, b: Product): number => {
+        switch (filters.value.sortBy) {
+          case 'none':
+            return 0
+          case 'title':
+            if (a.title < b.title) return -1
+            if (a.title > b.title) return 1
+            return 0
+          case 'price':
+            return a.price - b.price
+        }
+      }
+
     const displayProducts = computed(() =>
-      store.items.filter(categoryFilter).filter(colorFilter).filter(priceFilter)
+      store.items.filter(priceFilter).sort(sortBy())
     )
 
     return {
