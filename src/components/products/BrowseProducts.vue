@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { NLayout, NLayoutSider, NGrid, NGridItem } from 'naive-ui'
 
 import { useProducts } from '@/store/products'
@@ -25,17 +25,17 @@ export default defineComponent({
   setup() {
     const store = useProducts()
 
+    onMounted(() => store.fetchProducts())
+
     const filters = ref<FilterOptions>({
       category: '',
       color: '',
       priceRange: [1, 800]
     })
 
-    const categoryFilter = (product: Product) =>
-      product.type.includes(filters.value.category)
+    const categoryFilter = (product: Product) => true //product.type.includes(filters.value.category)
 
-    const colorFilter = (product: Product) =>
-      product.color.includes(filters.value.color)
+    const colorFilter = (product: Product) => true //product.color.includes(filters.value.color)
 
     const priceFilter = (product: Product) =>
       product.price >= filters.value.priceRange[0] &&
