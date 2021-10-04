@@ -4,6 +4,7 @@ import Crypto from 'crypto-js'
 // import JSEncrypt from 'jsencrypt'
 
 import { backend } from '@/api/backend'
+import { useCart } from './cart'
 
 export type Result = 'Success' | Error
 
@@ -15,7 +16,7 @@ export const useSession = defineStore('session', {
   getters: {},
   actions: {
     /**
-     * Stub login action
+     * Logs in using the php backend
      */
     
     async login(credentials: {
@@ -61,8 +62,6 @@ export const useSession = defineStore('session', {
         password: hashedPass,
         deskey: keyString
       }
-
-      console.log('HASHED STUFF ', loginInfo)
 
       const result = await backend<{
         username: string
@@ -115,6 +114,21 @@ export const useSession = defineStore('session', {
       }
 
       return await this.login(credentials)
+    },
+    async submitOrder(): Promise<Result> {
+      const cart = useCart()
+      if (!this.loggedIn) return Error('You need to be logged in first.')
+      const result = await backend<{ username: string; outcome: boolean }>(
+        'assign_submitorder.php',
+        {
+          username: this.userName,
+          ...cart.cartEncoded
+        }
+      )
+      if (result instanceof Error) return result
+      if (!result.outcome) return Error('Could not submit order.')
+
+      return 'Success'
     }
   }
 })
