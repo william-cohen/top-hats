@@ -1,11 +1,22 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { useCart } from '@/store/cart'
+import { useSession } from '@/store/session'
+import { defineComponent, onMounted, ref } from 'vue'
 export default defineComponent({
-  name: 'ProcessedStep'
+  name: 'ProcessedStep',
 
-  // props: {},
+  props: {},
 
-  // setup(props) {}
+  setup(props) {
+    const session = useSession()
+
+    const submitted = ref(false)
+
+    onMounted(async () => {
+      submitted.value = false
+      // const order = await session.submitOrder()
+    })
+  }
 })
 </script>
 <template>

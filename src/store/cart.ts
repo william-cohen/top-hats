@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 
 import { Product } from '@/store/products'
-
 interface CartEntry {
   item: Product
   quantity: number
 }
+
+export type Result = 'Success' | Error
 
 export const useCart = defineStore('cart', {
   state: () => ({
@@ -21,6 +22,17 @@ export const useCart = defineStore('cart', {
       return this.basket
         .map((entry) => entry.item.price * entry.quantity)
         .reduce((total, price) => total + price, 0)
+    },
+    cartEncoded(): { [i: string]: string } {
+      // Pffftgfodggd haha
+      return Array.from(
+        this.basket
+          .flatMap((entry) => Array(entry.quantity).map(() => entry.item.title))
+          .entries()
+      ).reduce(
+        (obj, entry) => ({ ...obj, [entry[0]]: entry[1] }),
+        {} as { [i: string]: string }
+      )
     }
   },
   actions: {
