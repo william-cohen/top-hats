@@ -5,6 +5,10 @@ import Crypto from 'crypto-js'
 
 import { backend } from '@/api/backend'
 import { useCart } from './cart'
+import {
+  javascript_des_decryption,
+  javascript_des_encryption
+} from '@/crypto/DES'
 
 export type Result = 'Success' | Error
 
@@ -18,49 +22,37 @@ export const useSession = defineStore('session', {
     /**
      * Logs in using the php backend
      */
-    
     async login(credentials: {
       username: string
       password: string
       deskey: string
     }): Promise<Result> {
+      const salt = Crypto.lib.WordArray.random(128 / 8)
+      const key = Crypto.PBKDF2(credentials.password, salt, {
+        keySize: 512 / 32,
+        iterations: 1000
+      })
 
-      const CryptoJSAesJson = {
-        stringify: function (cipherParams: any) {
-            const j: any = {ct: cipherParams.ciphertext.toString(Crypto.enc.Base64)};
-            if (cipherParams.iv) 
-              j.iv = cipherParams.iv.toString();
-            if (cipherParams.salt)
-              j.s = cipherParams.salt.toString();
-            return JSON.stringify(j);
-        },
-        parse: function (jsonStr : any)
-        {
-            const j = JSON.parse(jsonStr);
-            const cipherParams = Crypto.lib.CipherParams.create({ciphertext: Crypto.enc.Base64.parse(j.ct)});
-            if (j.iv)
-              cipherParams.iv = Crypto.enc.Hex.parse(j.iv)
-            if (j.s)
-              cipherParams.salt = Crypto.enc.Hex.parse(j.s)
-            return cipherParams;
-        }
-    }
+      const hashedPass = Crypto.SHA256(credentials.password).toString()
 
-      const salt = Crypto.lib.WordArray.random(128/8);
-      const key = Crypto.PBKDF2(credentials.password, salt, { keySize: 512/32, iterations: 1000 }); 
-      //const keyString = key.toString();
-      const keyString = "12345678";
-
-      const hashedPass = Crypto.SHA256(credentials.password).toString();
-      
-      //const encryptedPass = Crypto.DES.encrypt(hashedPass, keyString).toString();
-
-      //const encryptedPass = Crypto.AES.encrypt(JSON.stringify("value to encrypt"), "12345678", {format: CryptoJSAesJson}).toString();
+      /**
+       * Testing stuff
+       */
+      const encrypted = javascript_des_encryption(key.toString(), 'helloguvner')
+      console.log(
+        'ENCRYPTED',
+        encrypted,
+        javascript_des_decryption(key.toString(), encrypted).replaceAll(
+          '\0',
+          ''
+        )
+      )
+      /** */
 
       const loginInfo = {
         username: credentials.username,
         password: hashedPass,
-        deskey: keyString
+        deskey: key.toString()
       }
 
       const result = await backend<{
@@ -70,13 +62,11 @@ export const useSession = defineStore('session', {
         decryptedPass: string
       }>('assign_login.php', loginInfo)
 
-
-
       if (result instanceof Error) {
         return result
       }
 
-      console.log("Decrypted pass: ", result.decryptedPass);
+      console.log('Decrypted pass: ', result.decryptedPass)
 
       if (!result.userOutcome) {
         return Error('Unkown username.')
@@ -93,11 +83,15 @@ export const useSession = defineStore('session', {
     /**
      * Stub sign-up action
      */
-    async signUp(credentials: { username: string; password: string ; deskey: string ; }) {
+    async signUp(credentials: {
+      username: string
+      password: string
+      deskey: string
+    }) {
       const signupInfo = {
         username: credentials.username,
         password: Crypto.SHA256(credentials.password).toString(),
-        deskey: "key"
+        deskey: 'key'
       }
 
       const result = await backend<{ username: string; outcome: boolean }>(
