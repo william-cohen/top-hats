@@ -37,7 +37,8 @@ export default defineComponent({
 
     const model = ref({
       username: '',
-      password: ''
+      password: '',
+      deskey: "key",
     })
 
     const errorText = ref('')
