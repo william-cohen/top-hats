@@ -49,6 +49,10 @@
 		$result = mysqli_query($con, $sql);
 		if(mysqli_num_rows($result) == 1)
 		{
+			//find the ID given the user
+			$row = mysqli_fetch_array($result);
+			$id = $row['id'];
+
 			//if the credit card is going to be saved to the server
 			if($check)
 			{
@@ -56,10 +60,6 @@
 				$sql = "UPDATE user SET credit_card = '$card' WHERE id='$id'";
 				$result = mysqli_query($con, $sql);
 			}
-
-			//find the ID given the user
-			$row = mysqli_fetch_array($result);
-			$id = $row['id'];
 
 			//create order from user ID + date
 			$sql = "INSERT INTO orders(user_id, date_created) VALUES ('$id', '$date')";
