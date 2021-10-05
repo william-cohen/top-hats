@@ -9,7 +9,7 @@
 
 	$user = $_POST['username'];
 	$pass = $_POST['password']; // HEX encoded encrytped password hash
-	$encryptedkey  = $_POST['rsa_deskey']; // Base64 encoded RSA encrypted session key
+	$encryptedkey  = $_POST['rsa_deskey']; // RSA encrypted session key
   $error = null;
 
 	$userCheck = false;
@@ -18,7 +18,7 @@
   // Get the private Key
   $privateKey = get_rsa_privatekey('private.pem');
   // Decrypt the session key
-	$sessionKey = rsa_decryption(base64_decode($encryptedkey), $privateKey);
+	$sessionKey = rsa_decryption($encryptedkey, $privateKey);
 
   // TEST
   $pubkey = get_rsa_publickey('public.pem');
