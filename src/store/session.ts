@@ -75,11 +75,18 @@ export const useSession = defineStore('session', {
         response: string
       }>('assign_rsalogin.php', loginInfo)
 
+      if (response instanceof Error) {
+        return response
+      }
+
       const result =
         response instanceof Error
           ? response
           : (JSON.parse(
-              javascript_des_decryption(sessionKey, response.response)
+              javascript_des_decryption(
+                sessionKey,
+                response.response
+              ).replaceAll('\0', '')
             ) as {
               username: string
               userOutcome: boolean
