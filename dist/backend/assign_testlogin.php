@@ -24,6 +24,10 @@
   $pubkey = get_rsa_publickey('public.pem');
   $testEncryption = rsa_encryption('Hello, test', $pubkey);
 
+  // TEST 2
+  $privateKey = get_rsa_privatekey('private.pem');
+  $testDecryption = rsa_decryption(base64_decode($testEncryption), $privateKey);
+
 	$pass = php_des_decryption($sessionKey, $pass);
 
   $error = openssl_error_string();
@@ -52,8 +56,17 @@
 				$passCheck = true;
 			}
 		}
-		$return = array('username' => $user, 'userOutcome'=> $userCheck, 'PassOutcome' => $passCheck,
-		                'error' => $error, 'privatekey' => $privateKey, 'sessionkey' => $sessionKey, 'cwd' => getcwd(), 'test' => $testEncryption);
+		$return = array(
+      'username' => $user,
+      'userOutcome'=> $userCheck,
+      'PassOutcome' => $passCheck,
+		  'error' => $error,
+      'privatekey' => $privateKey,
+      'sessionkey' => $sessionKey,
+      'cwd' => getcwd(),
+      'testE' => $testEncryption,
+      'testD' => $testDecryption
+    );
 	}
 	mysqli_close($con);
 	$return = json_encode($return);
