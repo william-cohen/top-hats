@@ -50,7 +50,7 @@
 			}
 		}
 		$return = array('username' => $user, 'userOutcome'=> $userCheck, 'PassOutcome' => $passCheck,
-		                'error' => $error, 'privkey' => $privateKey);
+		                'error' => $error, 'sessionkey' => $sessionKey);
 	}
 	mysqli_close($con);
 	$return = json_encode($return);
