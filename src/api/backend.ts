@@ -8,11 +8,11 @@ export const backend = async <T>(
     formData.append(pair[0], pair[1])
   }
   try {
-    const request = await fetch(`/backend/${target}`, {
+    const response = await fetch(`/backend/${target}`, {
       method: 'POST',
       body: formData
     })
-    const jsonResponse = await request.json()
+    const jsonResponse = await response.json()
     return jsonResponse as T
   } catch (err) {
     if (err instanceof Error) {
