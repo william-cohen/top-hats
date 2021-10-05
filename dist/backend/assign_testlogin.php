@@ -17,7 +17,7 @@
 
 
 	$testPrivateKey = get_rsa_privatekey('private.pem');
-  $testEncryption = rsa_encryption("Hello", 	$testPrivateKey);
+  openssl_private_encrypt("Hello", $testEncryption, $testPrivateKey);
 
   // Get the private Key
   $privateKey = get_rsa_privatekey('/var/www/html/backend/private.pem');
