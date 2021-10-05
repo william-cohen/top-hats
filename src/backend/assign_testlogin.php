@@ -8,28 +8,21 @@
 	include('des.php');
 
 	$user = $_POST['username'];
-	$pass = $_POST['password']; // HEX encoded encrytped password hash
-	$encryptedkey  = $_POST['rsa_deskey']; // RSA encrypted session key
+	$encryptedPass = $_POST['password']; // HEX encoded encrytped password hash
+	$encryptedKey  = $_POST['rsa_deskey']; // RSA encrypted session key
   $error = null;
 
 	$userCheck = false;
 	$passCheck = false;
+  $sessionCheck = false;
 
   // Get the private Key
   $privateKey = get_rsa_privatekey('private.pem');
   // Decrypt the session key
-	$sessionKey = rsa_decryption($encryptedkey, $privateKey);
+	$sessionKey = rsa_decryption($encryptedKey, $privateKey);
 
-  // TEST
-  $pubkey = get_rsa_publickey('public.pem');
-  $testEncryption = rsa_encryption('Hello, test', $pubkey);
-
-  // TEST 2
-  $privateKey = get_rsa_privatekey('private.pem');
-  $testDecryption = rsa_decryption($testEncryption, $privateKey);
-
-	$pass = php_des_decryption($sessionKey, $pass);
-
+  // Decrypt the password with the session key
+	$pass = php_des_decryption($sessionKey, $encryptedPass);
   $error = openssl_error_string();
 
 	$serverAddress = "localhost";
@@ -54,18 +47,17 @@
 			if($row['password'] == $pass)
 			{
 				$passCheck = true;
+        // Save the session key for the user (used for checkout)
+        $sql = "UPDATE user SET session_key ='$key' WHERE username='$user'";
+        $result = mysqli_query($con, $sql);
+        $sessionCheck = true;
 			}
 		}
 		$return = array(
       'username' => $user,
       'userOutcome'=> $userCheck,
-      'PassOutcome' => $passCheck,
-		  'error' => $error,
-      'privatekey' => $privateKey,
-      'sessionkey' => $sessionKey,
-      'cwd' => getcwd(),
-      'testE' => $testEncryption,
-      'testD' => $testDecryption
+      'passOutcome' => $passCheck,
+		  'sessionOutcome' => $sessionCheck
     );
 	}
 	mysqli_close($con);

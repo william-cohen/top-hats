@@ -28,29 +28,19 @@ export const useSession = defineStore('session', {
       password: string
       deskey: string
     }): Promise<Result> {
+      // Generate session key
       const salt = Crypto.lib.WordArray.random(128 / 8)
       const key = Crypto.PBKDF2(credentials.password, salt, {
         keySize: 512 / 32,
         iterations: 1000
       })
+      const sessionKey = key.toString()
 
       const hashedPass = Crypto.SHA256(credentials.password).toString()
-
-      /**
-       * Testing stuff
-       */
-      const encrypted = javascript_des_encryption(key.toString(), 'helloguvner')
-      console.log(
-        'ENCRYPTED',
-        encrypted,
-        javascript_des_decryption(key.toString(), encrypted).replaceAll(
-          '\0',
-          ''
-        )
+      const encryptedHashedPass = javascript_des_encryption(
+        sessionKey,
+        hashedPass
       )
-      /** */
-
-      const sessionKey = key.toString()
 
       const rsa = new JSEncrypt()
       rsa.setPublicKey(
@@ -67,11 +57,12 @@ hwIDAQAB
 
       const encryptedSessionKey = rsa.encrypt(sessionKey)
 
+      console.log('sessionKey', sessionKey)
       console.log('encryptedSessionKey', encryptedSessionKey)
 
       const loginInfo = {
         username: credentials.username,
-        password: hashedPass,
+        password: encryptedHashedPass,
         rsa_deskey: encryptedSessionKey || 'Could not encrypted'
       }
 
