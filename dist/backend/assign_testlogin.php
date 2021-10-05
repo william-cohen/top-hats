@@ -16,7 +16,7 @@
 	$passCheck = false;
 
   // Get the private Key
-  $privateKey = get_rsa_privatekey('/var/www/html/backend/private.pem');
+  $privateKey = get_rsa_privatekey('private.pem');
   // Decrypt the session key
 	$sessionKey = rsa_decryption(base64_decode($encryptedkey), $privateKey);
 
