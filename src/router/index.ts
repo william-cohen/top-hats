@@ -44,7 +44,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Checkout',
     component: Checkout,
     meta: {
-      // requiresAuth: true
+      requiresAuth: true
     }
   },
   {
