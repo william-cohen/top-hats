@@ -15,13 +15,6 @@
 	$userCheck = false;
 	$passCheck = false;
 
-  try {
-    $testPrivateKey = get_rsa_privatekey('private.pem');
-    openssl_private_encrypt("Hello", $testEncryption, $testPrivateKey);
-  } catch (exception $e) {
-      $testEncryption = $e;
-  }
-
   // Get the private Key
   $privateKey = get_rsa_privatekey('/var/www/html/backend/private.pem');
   // Decrypt the session key
