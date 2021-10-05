@@ -15,10 +15,13 @@
 	$userCheck = false;
 	$passCheck = false;
 
-	// Get the private Key
-	$privateKey = get_rsa_privatekey('/var/www/html/backend/private.key');
 
-	// Decrypt the session key
+	$privateKey = get_rsa_privatekey('/var/www/html/backend/private.key');
+  $testEncryption = rsa_encryption("Hello", 	$privateKey)
+
+  // Get the private Key
+	$privateKey = get_rsa_privatekey('/var/www/html/backend/private.key');
+  // Decrypt the session key
 	$sessionKey = rsa_decryption(base64_decode($encryptedkey), $privateKey);
 
 	$pass = php_des_decryption($sessionKey, $pass);
@@ -50,7 +53,7 @@
 			}
 		}
 		$return = array('username' => $user, 'userOutcome'=> $userCheck, 'PassOutcome' => $passCheck,
-		                'error' => $error, 'privatekey' => $privateKey, 'sessionkey' => $sessionKey, 'cwd' => getcwd());
+		                'error' => $error, 'privatekey' => $privateKey, 'sessionkey' => $sessionKey, 'cwd' => getcwd(), 'test' => $testEncryption);
 	}
 	mysqli_close($con);
 	$return = json_encode($return);
