@@ -61,11 +61,11 @@ export default defineComponent({
       v-model:value="filters.priceRange"
       range
       :min="10"
-      :max="500"
+      :max="3300"
       :marks="{
         10: 'Poverty',
-        200: 'Modesty',
-        450: 'Distinguished'
+        1250: 'Modesty',
+        3000: 'Distinguished'
       }"
       :step="10"
     />

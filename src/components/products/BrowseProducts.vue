@@ -26,7 +26,7 @@ export default defineComponent({
 
     const filters = ref<FilterOptions>({
       sortBy: 'none',
-      priceRange: [1, 500]
+      priceRange: [1, 3300]
     })
 
     const priceFilter = (product: Product) =>

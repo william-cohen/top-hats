@@ -15,7 +15,7 @@ export default defineComponent({
   components: { NSpace, NSteps, NStep, NCard, NButtonGroup, NButton },
 
   setup() {
-    const current = ref(1)
+    const current = ref(4)
     const currentStatus = ref<'process' | 'finish' | 'error' | 'wait'>(
       'process'
     )
