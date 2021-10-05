@@ -20,7 +20,7 @@ export default defineComponent({
 
     const submitted = ref(false)
     const errorMessage = ref('')
-    const cartItems = computed(() => cart.basket.map((b) => b.item))
+    const cartItems = computed(() => cart.basket)
 
     onMounted(async () => {
       submitted.value = false
@@ -32,7 +32,7 @@ export default defineComponent({
       }
 
       submitted.value = true
-      cartItems.value[0].title
+      cartItems.value[0].item.title
     })
 
     return {
@@ -62,10 +62,11 @@ export default defineComponent({
     <n-h3>Your order</n-h3>
     <n-timeline item-placement="left">
       <n-timeline-item
-        v-for="item in cartItems"
-        :key="item.id"
-        :title="item.title"
-        :content="item.price"
+        v-for="entry in cartItems"
+        :key="entry.item.id"
+        :title="entry.item.title"
+        :content="'x' + entry.quantity"
+        :time="'$' + entry.item.price"
       />
     </n-timeline>
   </template>

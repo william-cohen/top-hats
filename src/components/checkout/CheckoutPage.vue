@@ -20,7 +20,7 @@ export default defineComponent({
     const router = useRouter()
     const cart = useCart()
 
-    const current = ref(4)
+    const current = ref(1)
     const currentStatus = ref<'process' | 'finish' | 'error' | 'wait'>(
       'process'
     )
