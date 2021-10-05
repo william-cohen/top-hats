@@ -9,6 +9,7 @@ import {
   javascript_des_decryption,
   javascript_des_encryption
 } from '@/crypto/DES'
+import JSEncrypt from 'jsencrypt'
 
 export type Result = 'Success' | Error
 
@@ -49,10 +50,29 @@ export const useSession = defineStore('session', {
       )
       /** */
 
+      const sessionKey = key.toString()
+
+      const rsa = new JSEncrypt()
+      rsa.setPublicKey(
+        `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzdxaei6bt/xIAhYsdFdW
+62CGTpRX+GXoZkzqvbf5oOxw4wKENjFX7LsqZXxdFfoRxEwH90zZHLHgsNFzXe3J
+qiRabIDcNZmKS2F0A7+Mwrx6K2fZ5b7E2fSLFbC7FsvL22mN0KNAp35tdADpl4lK
+qNFuF7NT22ZBp/X3ncod8cDvMb9tl0hiQ1hJv0H8My/31w+F+Cdat/9Ja5d1ztOO
+YIx1mZ2FD2m2M33/BgGY/BusUKqSk9W91Eh99+tHS5oTvE8CI8g7pvhQteqmVgBb
+JOa73eQhZfOQJ0aWQ5m2i0NUPcmwvGDzURXTKW+72UKDz671bE7YAch2H+U7UQea
+wwIDAQAB
+-----END PUBLIC KEY-----`
+      )
+
+      const encryptedSessionKey = rsa.encrypt(sessionKey)
+
+      console.log('encryptedSessionKey', encryptedSessionKey)
+
       const loginInfo = {
         username: credentials.username,
         password: hashedPass,
-        deskey: key.toString()
+        rsa_deskey: encryptedSessionKey || 'Could not encrypted'
       }
 
       const result = await backend<{
@@ -60,7 +80,7 @@ export const useSession = defineStore('session', {
         userOutcome: boolean
         PassOutcome: boolean
         decryptedPass: string
-      }>('assign_login.php', loginInfo)
+      }>('assign_testlogin.php', loginInfo)
 
       if (result instanceof Error) {
         return result
