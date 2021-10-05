@@ -5,9 +5,24 @@
 **/
 	$user = $_POST['username'];
 	$pass = $_POST['password'];
+	$key  = $_POST['deskey'];
 	$userCheck = false;
 	$passCheck = false;
+
+
+
 	
+	$key = hex2bin($key);
+
+	$pass = base64_decode($pass);
+
+	$decryptedPass = openssl_decrypt($pass, 'des-ecb', $key, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, '');
+
+	if ($decryptedPass === false)
+	{
+		$decryptedPass = openssl_error_string();
+	}
+
 	$serverAddress = "localhost";
 	$serverUser = "root";
 	$serverPass = "password";
@@ -32,7 +47,8 @@
 				$passCheck = true;
 			}
 		}
-		$return = array('username' => $user, 'userOutcome'=> $userCheck, 'PassOutcome' => $passCheck);
+		$return = array('username' => $user, 'userOutcome'=> $userCheck, 'PassOutcome' => $passCheck,
+		                'decryptedPass' => $decryptedPass);
 	}
 	mysqli_close($con);
 	$return = json_encode($return);
