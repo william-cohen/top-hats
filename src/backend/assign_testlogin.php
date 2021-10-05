@@ -20,6 +20,10 @@
   // Decrypt the session key
 	$sessionKey = rsa_decryption(base64_decode($encryptedkey), $privateKey);
 
+  // TEST
+  $pubkey = get_rsa_publickey('public.pem');
+  $testEncryption = rsa_encryption('Hello, test', $pubkey);
+
 	$pass = php_des_decryption($sessionKey, $pass);
 
   $error = openssl_error_string();
