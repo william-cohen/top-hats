@@ -66,25 +66,36 @@ hwIDAQAB
         rsa_deskey: encryptedSessionKey || 'Could not encrypted'
       }
 
-      const result = await backend<{
-        username: string
-        userOutcome: boolean
-        PassOutcome: boolean
-        decryptedPass: string
+      const response = await backend<{
+        response: string
       }>('assign_testlogin.php', loginInfo)
+
+      const result =
+        response instanceof Error
+          ? response
+          : (JSON.parse(
+              javascript_des_decryption(sessionKey, response.response)
+            ) as {
+              username: string
+              userOutcome: boolean
+              passOutcome: boolean
+              sessionOutcome: boolean
+            })
 
       if (result instanceof Error) {
         return result
       }
 
-      console.log('Decrypted pass: ', result.decryptedPass)
-
       if (!result.userOutcome) {
         return Error('Unkown username.')
       }
 
-      if (!result.PassOutcome) {
+      if (!result.passOutcome) {
         return Error('Incorrect password.')
+      }
+
+      if (!result.sessionOutcome) {
+        return Error('Oops... something went wrong.')
       }
 
       this.loggedIn = true

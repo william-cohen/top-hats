@@ -59,6 +59,10 @@
       'passOutcome' => $passCheck,
 		  'sessionOutcome' => $sessionCheck
     );
+
+    $return = array(
+      'response' => php_des_encryption($sessionKey, json_encode($return))
+    );
 	}
 	mysqli_close($con);
 	$return = json_encode($return);
