@@ -3,23 +3,27 @@
 	Assumptions:
 		password is hashed by the front end
 **/
+
+	include('rsa.php');
+	include('des.php');
+
 	$user = $_POST['username'];
-	$pass = $_POST['password'];
-	$key  = $_POST['deskey'];
+	$pass = $_POST['password']; // HEX encoded encrytped password hash
+	$encryptedkey  = $_POST['rsa_deskey']; // Base64 encoded RSA encrypted session key
+  $error = null;
 
 	$userCheck = false;
 	$passCheck = false;
 
-	$key = hex2bin($key);
+	// Get the private Key
+	$privateKey = get_rsa_privatekey('private.key');
 
-	$pass = base64_decode($pass);
+	// Decrypt the session key
+	$sessionKey = rsa_decryption(base64_decode($encryptedkey), $privateKey);
 
-	$decryptedPass = openssl_decrypt($pass, 'des-ecb', $key, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, '');
+	$pass = php_des_decryption($sessionKey, $pass);
 
-	if ($decryptedPass === false)
-	{
-		$decryptedPass = openssl_error_string();
-	}
+  $error = openssl_error_string();
 
 	$serverAddress = "localhost";
 	$serverUser = "root";
@@ -46,7 +50,7 @@
 			}
 		}
 		$return = array('username' => $user, 'userOutcome'=> $userCheck, 'PassOutcome' => $passCheck,
-		                'decryptedPass' => $decryptedPass);
+		                'error' => $error);
 	}
 	mysqli_close($con);
 	$return = json_encode($return);
