@@ -32,8 +32,6 @@ export const useProducts = defineStore('products', {
       >('assign_showproducts.php', {})
       if (result instanceof Error) return result
 
-      console.log('HAT RESULTS', result)
-
       this.items = result.map(
         (productTuple): Product => ({
           id: productTuple[0],
@@ -44,8 +42,6 @@ export const useProducts = defineStore('products', {
           date: new Date(productTuple[5])
         })
       )
-
-      console.log('HAT ITEMS', this.items)
 
       this.loaded = true
 
