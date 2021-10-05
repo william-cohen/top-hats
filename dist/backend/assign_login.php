@@ -11,7 +11,7 @@
 
 
 
-	
+
 	$key = hex2bin($key);
 
 	$pass = base64_decode($pass);
@@ -27,7 +27,7 @@
 	$serverUser = "root";
 	$serverPass = "password";
 	$con = new mysqli($serverAddress, $serverUser, $serverPass);
-	
+
 	if(mysqli_connect_errno())
 	{
 		$return = array('connection' => false);
@@ -37,7 +37,7 @@
 		$con-> select_db("tophats");
 		$sql = "SELECT * FROM user WHERE username='$user'";
 		$result = mysqli_query($con, $sql);
-		
+
 		if(mysqli_num_rows($result) == 1)
 		{
 			$userCheck = true;
