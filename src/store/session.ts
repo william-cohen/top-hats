@@ -11,12 +11,27 @@ import {
 } from '@/crypto/DES'
 import JSEncrypt from 'jsencrypt'
 
+const RSA_PUB_KEY = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzeoNkRMdN+5juYOl/Hj7
+fnvagnkW/PvX4edynxODm63n1t+jtYQobUFDCKoOx5RpBGqaB35Zkd4zQfy+/0ow
+TooHCYAdww0uEIXtLRMK06VWOP8hwWhzJHGJUihO+S/vFKoAkHIU3RZvcLinDARr
+JcOfaDBIsvHUli95bFN2iX//4nrDxpA4wS6atVkuEHdXOevCuVoAxqtwZyRgfFCX
+yuAeZ5RI39AD1uA7DtnKVBq+ByteTBzuS9zLw4pseE3OPvSMwyEm02DRDrqo5CH6
+xpaIiOfA2bf/yau90PvYJJZZBfVb56U0rKhv3zzKtLOlU1GUuJQk0CXE32s9/s6x
+hwIDAQAB
+-----END PUBLIC KEY-----`
+
 export type Result = 'Success' | Error
+
+export interface Order {
+  no: string
+}
 
 export const useSession = defineStore('session', {
   state: () => ({
     loggedIn: false,
-    userName: ''
+    userName: '',
+    sessionKey: ''
   }),
   getters: {},
   actions: {
@@ -43,17 +58,7 @@ export const useSession = defineStore('session', {
       )
 
       const rsa = new JSEncrypt()
-      rsa.setPublicKey(
-        `-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzeoNkRMdN+5juYOl/Hj7
-fnvagnkW/PvX4edynxODm63n1t+jtYQobUFDCKoOx5RpBGqaB35Zkd4zQfy+/0ow
-TooHCYAdww0uEIXtLRMK06VWOP8hwWhzJHGJUihO+S/vFKoAkHIU3RZvcLinDARr
-JcOfaDBIsvHUli95bFN2iX//4nrDxpA4wS6atVkuEHdXOevCuVoAxqtwZyRgfFCX
-yuAeZ5RI39AD1uA7DtnKVBq+ByteTBzuS9zLw4pseE3OPvSMwyEm02DRDrqo5CH6
-xpaIiOfA2bf/yau90PvYJJZZBfVb56U0rKhv3zzKtLOlU1GUuJQk0CXE32s9/s6x
-hwIDAQAB
------END PUBLIC KEY-----`
-      )
+      rsa.setPublicKey(RSA_PUB_KEY)
 
       const encryptedSessionKey = rsa.encrypt(sessionKey)
 
@@ -68,7 +73,7 @@ hwIDAQAB
 
       const response = await backend<{
         response: string
-      }>('assign_testlogin.php', loginInfo)
+      }>('assign_rsalogin.php', loginInfo)
 
       const result =
         response instanceof Error
@@ -100,6 +105,8 @@ hwIDAQAB
 
       this.loggedIn = true
       this.userName = credentials.username
+      this.sessionKey = sessionKey
+
       return 'Success'
     },
     /**

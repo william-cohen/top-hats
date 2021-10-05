@@ -19,6 +19,9 @@ export const useProducts = defineStore('products', {
     items: [] as Product[]
   }),
   actions: {
+    getProductById(id: string): Product | null {
+      return this.items.find((p) => p.id === id) || null
+    },
     async fetchProducts(): Promise<Result> {
       const result = await backend<
         [

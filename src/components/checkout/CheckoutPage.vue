@@ -6,6 +6,8 @@ import CartStep from './steps/CartStep.vue'
 import DeliveryStep from './steps/DeliveryStep.vue'
 import PaymentStep from './steps/PaymentStep.vue'
 import ProcessedStep from './steps/ProcessedStep.vue'
+import { useCart } from '@/store/cart'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'CheckoutPage',
@@ -15,6 +17,9 @@ export default defineComponent({
   components: { NSpace, NSteps, NStep, NCard, NButtonGroup, NButton },
 
   setup() {
+    const router = useRouter()
+    const cart = useCart()
+
     const current = ref(4)
     const currentStatus = ref<'process' | 'finish' | 'error' | 'wait'>(
       'process'
@@ -27,6 +32,10 @@ export default defineComponent({
     const next = () => {
       if (!stepValid.value) return
       current.value++
+      if (current.value === 5) {
+        cart.removeAll()
+        router.push({ name: 'Products' })
+      }
     }
 
     return {
