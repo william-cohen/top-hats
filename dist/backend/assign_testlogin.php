@@ -16,11 +16,11 @@
 	$passCheck = false;
 
 
-	$privateKey = get_rsa_privatekey('/var/www/html/backend/private.key');
-  $testEncryption = rsa_encryption("Hello", 	$privateKey)
+	$testPrivateKey = get_rsa_privatekey('/var/www/html/backend/private.key');
+  $testEncryption = rsa_encryption("Hello", 	$testPrivateKey);
 
   // Get the private Key
-	$privateKey = get_rsa_privatekey('/var/www/html/backend/private.key');
+  $privateKey = get_rsa_privatekey('/var/www/html/backend/private.key');
   // Decrypt the session key
 	$sessionKey = rsa_decryption(base64_decode($encryptedkey), $privateKey);
 
