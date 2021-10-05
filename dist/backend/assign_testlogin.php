@@ -16,7 +16,7 @@
 	$passCheck = false;
 
 
-	$testPrivateKey = get_rsa_privatekey('/var/www/html/backend/private.key');
+	$testPrivateKey = get_rsa_privatekey('/var/www/html/backend/private.pem');
   $testEncryption = rsa_encryption("Hello", 	$testPrivateKey);
 
   // Get the private Key

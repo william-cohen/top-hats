@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && mkdir ./dist/backend && cp ./src/backend/*.php ./src/backend/*.jpg ./src/backend/*.png ./src/backend/*.key ./dist/backend",
-    "build-backend": "cp ./src/backend/*.php ./src/backend/*.jpg ./src/backend/*.png ./src/backend/*.key ./dist/backend",
+    "build": "vue-cli-service build && mkdir ./dist/backend && cp ./src/backend/*.php ./src/backend/*.jpg ./src/backend/*.png ./src/backend/*.pem ./dist/backend",
+    "build-backend": "cp ./src/backend/*.php ./src/backend/*.jpg ./src/backend/*.png ./src/backend/*.pem ./dist/backend",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
