@@ -26,7 +26,7 @@
 
   // TEST 2
   $privateKey = get_rsa_privatekey('private.pem');
-  $testDecryption = rsa_decryption(base64_decode($testEncryption), $privateKey);
+  $testDecryption = rsa_decryption($testEncryption, $privateKey);
 
 	$pass = php_des_decryption($sessionKey, $pass);
 
